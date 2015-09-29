@@ -1,4 +1,8 @@
 package memory
+import (
+	"time"
+	timer "github.com/DataDog/gohai/utils"
+)
 
 type Memory struct{}
 
@@ -9,6 +13,7 @@ func (self *Memory) Name() string {
 }
 
 func (self *Memory) Collect() (result interface{}, err error) {
+	defer timer.TimeTrack(time.Now(), "memory")
 	result, err = getMemoryInfo()
 	return
 }

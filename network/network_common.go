@@ -3,6 +3,8 @@ package network
 import (
 	"errors"
 	"net"
+	"time"
+	timer "github.com/DataDog/gohai/utils"
 )
 
 type Network struct{}
@@ -14,6 +16,7 @@ func (self *Network) Name() string {
 }
 
 func (self *Network) Collect() (result interface{}, err error) {
+	defer timer.TimeTrack(time.Now(), "network")
 	result, err = getNetworkInfo()
 	return
 }

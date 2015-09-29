@@ -2,14 +2,16 @@ package main
 
 import (
 	"encoding/json"
-	"log"
-	"os"
-
 	"github.com/DataDog/gohai/cpu"
 	"github.com/DataDog/gohai/filesystem"
 	"github.com/DataDog/gohai/memory"
 	"github.com/DataDog/gohai/network"
 	"github.com/DataDog/gohai/platform"
+	timer "github.com/DataDog/gohai/utils"
+	"log"
+	"os"
+	"path/filepath"
+	"time"
 )
 
 type Collector interface {
@@ -41,6 +43,16 @@ func Collect() (result map[string]interface{}, err error) {
 }
 
 func main() {
+	debugPath := filepath.Join(os.TempDir(), "gohai_debug")
+	f, err := os.OpenFile(debugPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file: %v", err)
+	}
+	defer f.Close()
+
+	log.SetOutput(f)
+	log.Println("Starting gohai")
+	defer timer.TimeTrack(time.Now(), "collection")
 	gohai, err := Collect()
 
 	if err != nil {

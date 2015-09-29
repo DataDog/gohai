@@ -6,6 +6,8 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+	"time"
+	timer "github.com/DataDog/gohai/utils"
 )
 
 type Platform struct{}
@@ -17,6 +19,7 @@ func (self *Platform) Name() string {
 }
 
 func (self *Platform) Collect() (result interface{}, err error) {
+	defer timer.TimeTrack(time.Now(), "platform")
 	result, err = getPlatformInfo()
 	return
 }

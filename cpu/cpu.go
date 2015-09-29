@@ -1,4 +1,8 @@
 package cpu
+import (
+	"time"
+	timer "github.com/DataDog/gohai/utils"
+)
 
 type Cpu struct{}
 
@@ -9,6 +13,7 @@ func (self *Cpu) Name() string {
 }
 
 func (self *Cpu) Collect() (result interface{}, err error) {
+	defer timer.TimeTrack(time.Now(), "cpu")
 	result, err = getCpuInfo()
 	return
 }
