@@ -23,7 +23,7 @@ func getCpuInfo() (cpuInfo map[string]string, err error) {
 	cpuInfo = make(map[string]string)
 
 	cpu, err := utils.WindowsWMICommand("CPU",
-		"CurrentClockSpeed", "Name", "NumberOfCores",
+		"CurrentClockSpeed", "Name", "NumberOfLogicalProcessors",
 		"Caption", "Manufacturer")
 	if err != nil {
 		return
