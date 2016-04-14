@@ -38,7 +38,8 @@ func GetProcesses() ([]*ProcessInfo, error) {
 	for _, pid := range pids {
 		p, err := process.NewProcess(pid)
 		if err != nil {
-			log.Printf("Error fetching info for pid %d: %s", pid, err)
+			// an error can occur here only if the process has disappeared,
+			// so we can safely ignore the error and skip the process
 			continue
 		}
 
