@@ -3,6 +3,7 @@ package platform
 import (
 	"fmt"
 	"os"
+	"runtime"
 	"syscall"
 	"unsafe"
 
@@ -34,7 +35,12 @@ func getArchInfo() (systemInfo map[string]interface{}, err error) {
 	systemInfo = make(map[string]interface{})
 
 	systemInfo["hostname"], _ = os.Hostname()
-	systemInfo["machine"] = "x86_64"
+
+	if runtime.GOARCH == "amd64" {
+		systemInfo["machine"] = "x86_64"
+	} else {
+		systemInfo["machine"] = runtime.GOARCH
+	}
 
 	k, err := registry.OpenKey(registry.LOCAL_MACHINE,
 		registryHive,
