@@ -28,7 +28,7 @@ func getCpuInfo() (cpuInfo map[string]string, err error) {
 		}
 	}
 
-	if cpuInfo["mhz"] {
+	if len(cpuInfo["mhz"]) != 0 {
 		mhz, err := strconv.Atoi(cpuInfo["mhz"])
 		if err == nil {
 			cpuInfo["mhz"] = strconv.Itoa(mhz / 1000000)
