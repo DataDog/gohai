@@ -110,16 +110,16 @@ type SYSTEM_INFO struct {
 }
 
 type CPU_INFO struct {
-	numaNodeCount          int    // number of NUMA nodes
-	pkgcount               int    // number of packages (physical CPUS)
-	corecount              int    // total number of cores
-	logicalcount           int    // number of logical CPUS
-	l1CacheSize            uint32 // layer 1 cache size
-	l2CacheSize            uint32 // layer 2 cache size
-	l3CacheSize            uint32 // layer 3 cache size
-	relationGroups         int    // number of cpu relation groups
-	max_procs_in_groups    int    // max number of processors
-	active_procs_in_groups int    // active processors
+	numaNodeCount       int    // number of NUMA nodes
+	pkgcount            int    // number of packages (physical CPUS)
+	corecount           int    // total number of cores
+	logicalcount        int    // number of logical CPUS
+	l1CacheSize         uint32 // layer 1 cache size
+	l2CacheSize         uint32 // layer 2 cache size
+	l3CacheSize         uint32 // layer 3 cache size
+	relationGroups      int    // number of cpu relation groups
+	maxProcsInGroups    int    // max number of processors
+	activeProcsInGroups int    // active processors
 
 }
 

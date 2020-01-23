@@ -202,8 +202,8 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 			bufused += uint32(used)
 			cpuInfo.relationGroups += int(group.MaximumGroupCount)
 			for _, info := range groupInfo {
-				cpuInfo.max_procs_in_groups += int(info.MaximumProcessorCount)
-				cpuInfo.active_procs_in_groups += int(info.ActiveProcessorCount)
+				cpuInfo.maxProcsInGroups += int(info.MaximumProcessorCount)
+				cpuInfo.activeProcsInGroups += int(info.ActiveProcessorCount)
 			}
 
 		}
