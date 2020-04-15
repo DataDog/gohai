@@ -14,15 +14,13 @@ type WKSTA_INFO_100 struct {
 }
 
 type SERVER_INFO_101 struct {
-	sv101_platform_id	uint32
-	sv101_name			string
-	sv101_version_major	uint32
-	sv101_version_minor	uint32
-	sv101_type			uint32
-	sv101_comment		string
-
+	sv101_platform_id   uint32
+	sv101_name          string
+	sv101_version_major uint32
+	sv101_version_minor uint32
+	sv101_type          uint32
+	sv101_comment       string
 }
-
 
 func byteArrayToWksaInfo(data []byte) (info WKSTA_INFO_100) {
 	info.wki100_platform_id = binary.LittleEndian.Uint32(data)
@@ -56,7 +54,7 @@ func platGetVersion(outdata *byte) (maj uint64, min uint64, err error) {
 	return
 }
 
-func platGetServerInfo(data *byte) (si101 SERVER_INFO_101){
+func platGetServerInfo(data *byte) (si101 SERVER_INFO_101) {
 	var outdata []byte
 	outdata = (*[40]byte)(unsafe.Pointer(data))[:]
 	si101.sv101_platform_id = binary.LittleEndian.Uint32(outdata)
