@@ -16,7 +16,6 @@ var (
 	procNetWkstaGetInfo = modNetapi32.NewProc("NetWkstaGetInfo")
 	procNetServerGetInfo = modNetapi32.NewProc("NetServerGetInfo")
 	procNetApiBufferFree = modNetapi32.NewProc("NetApiBufferFree")
-
 )
 
 const (
