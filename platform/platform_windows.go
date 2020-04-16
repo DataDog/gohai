@@ -130,9 +130,11 @@ func GetArchInfo() (systemInfo map[string]interface{}, err error) {
 
 	// do additional work so that we don't panic() when the library's
 	// not there (like in a container)
+	var family string
 	si, sierr := netServerGetInfo()
 	if sierr != nil {
-		var family string
+		family = "Unknown"
+	else {
 		if (si.sv101_type&SV_TYPE_WORKSTATION) == SV_TYPE_WORKSTATION ||
 			(si.sv101_type&SV_TYPE_SERVER) == SV_TYPE_SERVER {
 			if (si.sv101_type & SV_TYPE_WORKSTATION) == SV_TYPE_WORKSTATION {
@@ -150,8 +152,9 @@ func GetArchInfo() (systemInfo map[string]interface{}, err error) {
 		} else if (si.sv101_type & SV_TYPE_DOMAIN_BAKCTRL) == SV_TYPE_DOMAIN_BAKCTRL {
 			family = "Backup Domain Controller"
 		}
-		systemInfo["family"] = family
 	}
+	systemInfo["family"] = family
+
 	return
 }
 
