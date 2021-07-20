@@ -140,11 +140,12 @@ func init() {
 	flag.Var(&options.only, "only", "Run only the listed collectors (comma-separated list of collector names)")
 	flag.Var(&options.exclude, "exclude", "Run all the collectors except those listed (comma-separated list of collector names)")
 	flag.StringVar(&options.logLevel, "log-level", "info", "Log level (one of 'warn', 'info', 'debug')")
-	flag.Parse()
 }
 
 func main() {
 	defer log.Flush()
+
+	flag.Parse()
 
 	err := initLogging(options.logLevel)
 	if err != nil {
