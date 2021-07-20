@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
 	"strings"
 
 	// 3p
@@ -103,10 +104,11 @@ func versionString() string {
 
 // Implement the flag.Value interface
 func (sc *SelectedCollectors) String() string {
-	collectorSlice := make([]string, 0)
+	collectorSlice := make([]string, 0, len(*sc))
 	for collectorName := range *sc {
 		collectorSlice = append(collectorSlice, collectorName)
 	}
+	sort.Strings(collectorSlice)
 	return fmt.Sprint(collectorSlice)
 }
 
