@@ -101,7 +101,9 @@ func fetchOsDescription() (string, error) {
 	if err == nil {
 		procBrandingFormatString := winbrand.NewProc("BrandingFormatString")
 		if procBrandingFormatString.Find() == nil {
-			os, _, err := procBrandingFormatString.Call(uintptr(unsafe.Pointer(StringToUTF16Ptr("%WINDOWS_LONG%"))))
+			// Encode the string "%WINDOWS_LONG%" to UTF-16 and append a null byte for the Windows API
+			magicString := utf16.Encode([]rune("%WINDOWS_LONG%" + "\x00"))
+			os, _, err := procBrandingFormatString.Call(uintptr(unsafe.Pointer(&magicString[0])))
 			defer syscall.LocalFree(syscall.Handle(os))
 			if err == ERROR_SUCESS {
 				return windows.UTF16PtrToString((*uint16)(unsafe.Pointer(os))), nil
