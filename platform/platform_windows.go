@@ -13,6 +13,8 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
+// From winnt.h (see https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-osversioninfoexw)
+// This is used by https://docs.microsoft.com/en-us/windows/win32/devnotes/rtlgetversion
 type OSVERSIONINFOEXW struct {
 	dwOSVersionInfoSize uint32
 	dwMajorVersion uint32
@@ -100,6 +102,7 @@ func fetchOsDescription() (string, error) {
 	err := winbrand.Load()
 	if err == ERROR_SUCESS {
 		err = nil
+		// From https://stackoverflow.com/a/69462683
 		procBrandingFormatString := winbrand.NewProc("BrandingFormatString")
 		if procBrandingFormatString.Find() != nil {
 			// Encode the string "%WINDOWS_LONG%" to UTF-16 and append a null byte for the Windows API
@@ -116,19 +119,16 @@ func fetchOsDescription() (string, error) {
 			registry.QUERY_VALUE)
 		defer k.Close()
 		if err == nil {
-			os , _, _ := k.GetStringValue(productNameKey)
-			return os, nil
+			os , _, err := k.GetStringValue(productNameKey)
+			if err == nil {
+				return os, nil
+			}
 		}
 	}
 	return "(undetermined windows version)", err
 }
 
-func fetchWindowsVersion() (uint64,uint64,uint64,error) {
-	var err error
-	var major uint64
-	var minor uint64
-	var build uint64
-
+func fetchWindowsVersion() (major uint64, minor uint64, build uint64, err error) {
 	var osversion OSVERSIONINFOEXW
 	status, _, _ := procRtlGetVersion.Call(uintptr(unsafe.Pointer(&osversion)))
 	if status == 0 {
@@ -136,20 +136,31 @@ func fetchWindowsVersion() (uint64,uint64,uint64,error) {
 		minor = uint64(osversion.dwMinorVersion)
 		build = uint64(osversion.dwBuildNumber)
 	} else {
-		k, err := registry.OpenKey(registry.LOCAL_MACHINE,
+		var regkey registry.Key
+		regkey, err = registry.OpenKey(registry.LOCAL_MACHINE,
 			registryHive,
 			registry.QUERY_VALUE)
-		defer k.Close()
+		defer regkey.Close()
 		if err != nil {
-			var regmajor, _, _ = k.GetIntegerValue(majorKey)
-			var regminor, _, _ = k.GetIntegerValue(minorKey)
-			var regbuild, _, _ = k.GetStringValue(buildNumberKey)
-			major = regmajor
-			minor = regminor
-			build, _ = strconv.ParseUint(regbuild, 10, 0)
+			major, _, err = regkey.GetIntegerValue(majorKey)
+			if err != nil {
+				return
+			}
+
+			minor, _, err = regkey.GetIntegerValue(minorKey)
+			if err != nil {
+				return
+			}
+
+			var regbuild string
+			regbuild, _, err = regkey.GetStringValue(buildNumberKey)
+			if err != nil {
+				return
+			}
+			build, err = strconv.ParseUint(regbuild, 10, 0)
 		}
 	}
-	return major, minor, build, err
+	return
 }
 
 // GetArchInfo() returns basic host architecture information
