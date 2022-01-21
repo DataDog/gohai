@@ -61,7 +61,11 @@ func getPythonVersion(execCmd utils.ExecCmdFunc) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	version := fmt.Sprintf("%s", out)
+	return parsePythonVersion(out)
+}
+
+func parsePythonVersion(cmdOut []byte) (string, error) {
+	version := fmt.Sprintf("%s", cmdOut)
 	values := regexp.MustCompile("Python (.*)\n").FindStringSubmatch(version)
 	if len(values) < 2 {
 		return "", fmt.Errorf("could not find Python version in `python -V` output: %q", version)
