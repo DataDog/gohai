@@ -8,6 +8,8 @@ import (
 	"regexp"
 	"runtime"
 	"strings"
+
+	"github.com/DataDog/gohai/utils"
 )
 
 type Platform struct{}
@@ -41,7 +43,7 @@ func getPlatformInfo() (platformInfo map[string]interface{}, err error) {
 	// If this errors, swallow the error.
 	// It will usually mean that Python is not on the PATH
 	// and we don't care about that.
-	pythonV, e := getPythonVersion()
+	pythonV, e := getPythonVersion(exec.Command)
 
 	// if there was no failure, add the python variables to the platformInfo
 	if e == nil {
@@ -54,8 +56,8 @@ func getPlatformInfo() (platformInfo map[string]interface{}, err error) {
 	return
 }
 
-func getPythonVersion() (string, error) {
-	out, err := exec.Command("python", "-V").CombinedOutput()
+func getPythonVersion(execCmd utils.ExecCmdFunc) (string, error) {
+	out, err := execCmd("python", "-V").CombinedOutput()
 	if err != nil {
 		return "", err
 	}
