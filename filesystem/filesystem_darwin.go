@@ -1,7 +1,7 @@
 package filesystem
 
 var dfOptions = []string{"-l", "-k"}
-var expectedLength = 9
+var expectedLength = 6
 
 func updatefileSystemInfo(values []string) map[string]string {
 	return map[string]string{
