@@ -29,6 +29,9 @@ type gohaiPayload struct {
 		Stepping             string `json:"stepping"`
 		VendorID             string `json:"vendor_id"`
 
+		// CacheSize is only reported on Linux
+		CacheSize string `json:"cache_size"`
+
 		// On Windows, we report additional fields
 		CacheSizeL1  string `json:"cache_size_l1"`
 		CacheSizeL2  string `json:"cache_size_l2"`
@@ -132,7 +135,8 @@ func TestGohaiSerialization(t *testing.T) {
 		}
 	}
 	assert.NotEmpty(t, payload.Network.Ipaddress)
-	assert.NotEmpty(t, payload.Network.Ipaddressv6)
+	// Ipaddressv6 *can* be empty
+	// assert.NotEmpty(t, payload.Network.Ipaddressv6)
 	assert.NotEmpty(t, payload.Network.Macaddress)
 
 	assert.NotEmpty(t, payload.Platform.Gooarch)
