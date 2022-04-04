@@ -33,8 +33,8 @@ func parseDfOutput(out string) (interface{}, error) {
 	lines := strings.Split(out, "\n")
 	var fileSystemInfo = make([]interface{}, len(lines)-2)
 	for i, line := range lines[1:] {
-		values := regexp.MustCompile("\\s+").Split(line, expectedLength)
-		if len(values) == expectedLength {
+		values := regexp.MustCompile(`\s+`).Split(line, -1)
+		if len(values) >= expectedLength {
 			fileSystemInfo[i] = updatefileSystemInfo(values)
 		}
 	}
