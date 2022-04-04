@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -85,11 +86,15 @@ func TestGohaiSerialization(t *testing.T) {
 	assert.NotEmpty(t, payload.CPU.VendorID)
 
 	if assert.NotEmpty(t, payload.Filesystem) {
-		assert.NotEmpty(t, payload.Filesystem[0].KbSize, 0)
+		if runtime.GOOS != "windows" {
+			assert.NotEmpty(t, payload.Filesystem[0].KbSize, 0)
+		}
 		assert.NotEmpty(t, payload.Filesystem[0].MountedOn, 0)
 		assert.NotEmpty(t, payload.Filesystem[0].Name, 0)
 	}
-	assert.NotEmpty(t, payload.Memory.SwapTotal)
+	if runtime.GOOS != "windows" {
+		assert.NotEmpty(t, payload.Memory.SwapTotal)
+	}
 	assert.NotEmpty(t, payload.Memory.Total)
 
 	if assert.NotEmpty(t, payload.Network.Interfaces) {
@@ -113,8 +118,12 @@ func TestGohaiSerialization(t *testing.T) {
 	assert.NotEmpty(t, payload.Platform.Hostname)
 	assert.NotEmpty(t, payload.Platform.KernelName)
 	assert.NotEmpty(t, payload.Platform.KernelRelease)
-	assert.NotEmpty(t, payload.Platform.KernelVersion)
+	if runtime.GOOS != "windows" {
+		assert.NotEmpty(t, payload.Platform.KernelVersion)
+	}
 	assert.NotEmpty(t, payload.Platform.Machine)
 	assert.NotEmpty(t, payload.Platform.Os)
-	assert.NotEmpty(t, payload.Platform.Processor)
+	if runtime.GOOS != "windows" {
+		assert.NotEmpty(t, payload.Platform.Processor)
+	}
 }
