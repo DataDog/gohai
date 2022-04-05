@@ -131,15 +131,18 @@ func TestGohaiSerialization(t *testing.T) {
 			assert.NotEmpty(t, itf.Name)
 			// Some interfaces don't have MacAddresses
 			//assert.NotEmpty(t, itf.Macaddress)
-			// Disabled interfaces won't have any IP address
-			if len(itf.Ipv6) > 0 {
+
+			if len(itf.Ipv4) == 0 && len(itf.Ipv6) == 0 {
+				// Disabled interfaces won't have any IP address
+				continue
+			}
+			if len(itf.Ipv4) == 0 {
 				assert.NotEmpty(t, itf.Ipv6)
 				assert.NotEmpty(t, itf.Ipv6Network)
 				for _, ip := range itf.Ipv6 {
 					assert.NotNil(t, net.ParseIP(ip))
 				}
-			}
-			if len(itf.Ipv4) > 0 {
+			} else {
 				assert.NotEmpty(t, itf.Ipv4)
 				assert.NotEmpty(t, itf.Ipv4Network)
 				for _, ip := range itf.Ipv4 {
