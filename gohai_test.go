@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"net"
 	"runtime"
 	"testing"
 
@@ -126,17 +127,26 @@ func TestGohaiSerialization(t *testing.T) {
 	assert.NotEmpty(t, payload.Memory.Total)
 
 	if assert.NotEmpty(t, payload.Network.Interfaces) {
-		assert.NotEmpty(t, payload.Network.Interfaces[0].Name)
-		assert.NotEmpty(t, payload.Network.Interfaces[0].Macaddress)
-		if len(payload.Network.Interfaces[0].Ipv4) == 0 {
-			assert.NotEmpty(t, payload.Network.Interfaces[0].Ipv6)
-			assert.NotEmpty(t, payload.Network.Interfaces[0].Ipv6Network)
-		} else {
-			assert.NotEmpty(t, payload.Network.Interfaces[0].Ipv4)
-			assert.NotEmpty(t, payload.Network.Interfaces[0].Ipv4Network)
+		for _, itf := range payload.Network.Interfaces {
+			assert.NotEmpty(t, itf.Name)
+			assert.NotEmpty(t, itf.Macaddress)
+			if len(itf.Ipv4) == 0 {
+				assert.NotEmpty(t, itf.Ipv6)
+				assert.NotEmpty(t, itf.Ipv6Network)
+				for _, ip := range itf.Ipv6 {
+					assert.NotNil(t, net.ParseIP(ip))
+				}
+			} else {
+				assert.NotEmpty(t, itf.Ipv4)
+				assert.NotEmpty(t, itf.Ipv4Network)
+				for _, ip := range itf.Ipv4 {
+					assert.NotNil(t, net.ParseIP(ip))
+				}
+			}
 		}
 	}
 	assert.NotEmpty(t, payload.Network.Ipaddress)
+	assert.NotNil(t, net.ParseIP(payload.Network.Ipaddress))
 	// Ipaddressv6 *can* be empty
 	// assert.NotEmpty(t, payload.Network.Ipaddressv6)
 	assert.NotEmpty(t, payload.Network.Macaddress)
