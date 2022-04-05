@@ -18,6 +18,8 @@ func TestSelectedCollectors_String(t *testing.T) {
 
 // gohaiPayload defines the format we expect the gohai information
 // to be in.
+// Any change to this datastructure should be notified to the backend
+// team to ensure compatibility.
 type gohaiPayload struct {
 	CPU struct {
 		CPUCores             string `json:"cpu_cores"`
