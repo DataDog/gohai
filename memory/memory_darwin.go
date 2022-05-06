@@ -1,3 +1,6 @@
+//go:build linux || darwin
+// +build linux darwin
+
 package memory
 
 import (
@@ -21,4 +24,27 @@ func getMemoryInfo() (memoryInfo map[string]string, err error) {
 	}
 
 	return
+}
+
+func getMemoryInfoByte() (mem uint64, swap uint64, err error) {
+	memInfo, err := getMemoryInfo()
+	var mem, swap uint64
+
+	// mem is already in bytes but `swap_total` use the format "5120,00M"
+	if v, ok := memInfo["swap_total"]; ok {
+		idx := strings.IndexAny(v, ",.") // depending on the local either a comma or dot is used
+		swapTotal, e := strconv.ParseUint(v[0:idx])
+		if e == nil {
+			swap = swapTotal * 1024 * 1024 // swapTotal is in mb
+		}
+	}
+
+	if v, ok := memInfo["total"]; ok {
+		t, e := strconv.ParseUint(v)
+		if e == nil {
+			mem = t // mem is returned in bytes
+		}
+	}
+
+	return mem, swap, err
 }
