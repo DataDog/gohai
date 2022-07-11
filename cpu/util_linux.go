@@ -57,7 +57,9 @@ func sysCpuSize(path string) (uint64, bool) {
 }
 
 // sysCpuList reads a list of integers, comma-seprated with ranges (`0-5,7-11`)
-// from a file in /sys/devices/system/cpu
+// from a file in /sys/devices/system/cpu.  The return value is the set of
+// integers included in the list (for the example above, {0, 1, 2, 3, 4, 5, 7,
+// 8, 9, 10, 11}).
 func sysCpuList(path string) (map[uint64]struct{}, bool) {
 	content, err := ioutil.ReadFile(testingPrefix + "/sys/devices/system/cpu/" + path)
 	if err != nil {
@@ -72,7 +74,7 @@ func sysCpuList(path string) (map[uint64]struct{}, bool) {
 
 	for _, elt := range strings.Split(contentStr, ",") {
 		if submatches := listRangeRegex.FindStringSubmatch(elt); submatches != nil {
-			// Handle the NN-NN form
+			// Handle the NN-NN form, inserting each included integer into the set
 			first, err := strconv.ParseUint(submatches[1], 0, 64)
 			if err != nil {
 				return nil, false
@@ -85,7 +87,7 @@ func sysCpuList(path string) (map[uint64]struct{}, bool) {
 				result[i] = struct{}{}
 			}
 		} else {
-			// Handle a simple integer
+			// Handle a simple integer, just inserting it into the set
 			i, err := strconv.ParseUint(elt, 0, 64)
 			if err != nil {
 				return nil, false
