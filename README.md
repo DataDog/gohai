@@ -80,7 +80,7 @@ Some information about CPUs is drawn from the source of the `util-linux` utility
 To update this information, such as when new processors are released, run
 
 ```
-python cpu/from-lscpu-arm.py /path/to/lscpu-arm.c > cpu/cpu_linux_arm64.go
+python cpu/from-lscpu-arm.py /path/to/lscpu-arm.c > cpu/lscpu_linux_arm64.go
 ```
 
 ## See Also
