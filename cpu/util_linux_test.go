@@ -158,3 +158,51 @@ func TestSysCpuList(t *testing.T) {
 		require.False(t, ok)
 	})
 }
+
+func TestReadProcCpuInfo(t *testing.T) {
+	testingPrefix = t.TempDir()
+	defer func() { testingPrefix = "" }()
+	os.MkdirAll(filepath.Join(testingPrefix, filepath.FromSlash("proc")), 0o777)
+	path := filepath.Join(testingPrefix, filepath.FromSlash("proc/cpuinfo"))
+
+	t.Run("simple", func(t *testing.T) {
+		ioutil.WriteFile(path, []byte(`
+processor:	0
+
+processor:	1
+`), 0o777)
+		info, err := readProcCpuInfo()
+		require.NoError(t, err)
+		require.Equal(t, []map[string]string{
+			{"processor": "0"},
+			{"processor": "1"},
+		}, info)
+	})
+
+	t.Run("bogus stanza", func(t *testing.T) {
+		ioutil.WriteFile(path, []byte(`
+processor:	0
+
+processor:	1
+
+so much depends
+upon
+
+a red wheel
+barrow
+
+glazed with rain
+water
+
+beside the white
+chickens
+	-- William Carlos Williams
+`), 0o777)
+		info, err := readProcCpuInfo()
+		require.NoError(t, err)
+		require.Equal(t, []map[string]string{
+			{"processor": "0"},
+			{"processor": "1"},
+		}, info)
+	})
+}

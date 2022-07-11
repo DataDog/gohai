@@ -107,7 +107,7 @@ func readProcCpuInfo() ([]map[string]string, error) {
 	}
 	defer file.Close()
 
-	var results []map[string]string
+	var stanzas []map[string]string
 	var stanza map[string]string
 
 	scanner := bufio.NewScanner(file)
@@ -120,9 +120,12 @@ func readProcCpuInfo() ([]map[string]string, error) {
 		}
 
 		pair := strings.SplitN(line, ":", 2)
+		if len(pair) != 2 {
+			continue
+		}
 		if stanza == nil {
 			stanza = make(map[string]string)
-			results = append(results, stanza)
+			stanzas = append(stanzas, stanza)
 		}
 		stanza[strings.TrimSpace(pair[0])] = strings.TrimSpace(pair[1])
 	}
@@ -130,6 +133,17 @@ func readProcCpuInfo() ([]map[string]string, error) {
 	if scanner.Err() != nil {
 		err = scanner.Err()
 		return nil, err
+	}
+
+	// On some platforms, such as rPi, there are stanzas in this file that do
+	// not correspond to processors.  It doesn't seem this file is intended for
+	// machine consumption!  So, we filter those out.
+	var results []map[string]string
+	for _, stanza := range stanzas {
+		if _, found := stanza["processor"]; !found {
+			continue
+		}
+		results = append(results, stanza)
 	}
 
 	return results, nil
