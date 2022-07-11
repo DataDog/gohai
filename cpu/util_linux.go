@@ -9,12 +9,12 @@ import (
 	"strings"
 )
 
-var testingPrefix = ""
+var prefix = "" // only used for testing
 var listRangeRegex = regexp.MustCompile("([0-9]+)-([0-9]+)$")
 
 // sysCpuInt reads an integer from a file in /sys/devices/system/cpu
 func sysCpuInt(path string) (uint64, bool) {
-	content, err := ioutil.ReadFile(testingPrefix + "/sys/devices/system/cpu/" + path)
+	content, err := ioutil.ReadFile(prefix + "/sys/devices/system/cpu/" + path)
 	if err != nil {
 		return 0, false
 	}
@@ -29,7 +29,7 @@ func sysCpuInt(path string) (uint64, bool) {
 
 // sysCpuSize reads an value with a K/M/G suffix from a file in /sys/devices/system/cpu
 func sysCpuSize(path string) (uint64, bool) {
-	content, err := ioutil.ReadFile(testingPrefix + "/sys/devices/system/cpu/" + path)
+	content, err := ioutil.ReadFile(prefix + "/sys/devices/system/cpu/" + path)
 	if err != nil {
 		return 0, false
 	}
@@ -61,7 +61,7 @@ func sysCpuSize(path string) (uint64, bool) {
 // integers included in the list (for the example above, {0, 1, 2, 3, 4, 5, 7,
 // 8, 9, 10, 11}).
 func sysCpuList(path string) (map[uint64]struct{}, bool) {
-	content, err := ioutil.ReadFile(testingPrefix + "/sys/devices/system/cpu/" + path)
+	content, err := ioutil.ReadFile(prefix + "/sys/devices/system/cpu/" + path)
 	if err != nil {
 		return nil, false
 	}
@@ -103,7 +103,7 @@ func sysCpuList(path string) (map[uint64]struct{}, bool) {
 // blank-line-separated stanzas, and each stanza is a map of string to string,
 // with whitespace stripped.
 func readProcCpuInfo() ([]map[string]string, error) {
-	file, err := os.Open(testingPrefix + "/proc/cpuinfo")
+	file, err := os.Open(prefix + "/proc/cpuinfo")
 	if err != nil {
 		return nil, err
 	}

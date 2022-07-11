@@ -10,10 +10,10 @@ import (
 )
 
 func TestSysCpuInt(t *testing.T) {
-	testingPrefix = t.TempDir()
-	defer func() { testingPrefix = "" }()
-	os.MkdirAll(filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
-	path := filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
+	prefix = t.TempDir()
+	defer func() { prefix = "" }()
+	os.MkdirAll(filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
+	path := filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
 
 	t.Run("zero", func(t *testing.T) {
 		ioutil.WriteFile(path, []byte("0\n"), 0o666)
@@ -49,10 +49,10 @@ func TestSysCpuInt(t *testing.T) {
 }
 
 func TestSysCpuSize(t *testing.T) {
-	testingPrefix = t.TempDir()
-	defer func() { testingPrefix = "" }()
-	os.MkdirAll(filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
-	path := filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
+	prefix = t.TempDir()
+	defer func() { prefix = "" }()
+	os.MkdirAll(filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
+	path := filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
 
 	t.Run("zero", func(t *testing.T) {
 		ioutil.WriteFile(path, []byte("0\n"), 0o666)
@@ -102,10 +102,10 @@ func TestSysCpuSize(t *testing.T) {
 }
 
 func TestSysCpuList(t *testing.T) {
-	testingPrefix = t.TempDir()
-	defer func() { testingPrefix = "" }()
-	os.MkdirAll(filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
-	path := filepath.Join(testingPrefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
+	prefix = t.TempDir()
+	defer func() { prefix = "" }()
+	os.MkdirAll(filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu")), 0o777)
+	path := filepath.Join(prefix, filepath.FromSlash("sys/devices/system/cpu/somefile"))
 
 	t.Run("empty", func(t *testing.T) {
 		ioutil.WriteFile(path, []byte("\n"), 0o666)
@@ -160,10 +160,10 @@ func TestSysCpuList(t *testing.T) {
 }
 
 func TestReadProcCpuInfo(t *testing.T) {
-	testingPrefix = t.TempDir()
-	defer func() { testingPrefix = "" }()
-	os.MkdirAll(filepath.Join(testingPrefix, filepath.FromSlash("proc")), 0o777)
-	path := filepath.Join(testingPrefix, filepath.FromSlash("proc/cpuinfo"))
+	prefix = t.TempDir()
+	defer func() { prefix = "" }()
+	os.MkdirAll(filepath.Join(prefix, filepath.FromSlash("proc")), 0o777)
+	path := filepath.Join(prefix, filepath.FromSlash("proc/cpuinfo"))
 
 	t.Run("simple", func(t *testing.T) {
 		ioutil.WriteFile(path, []byte(`
