@@ -98,7 +98,7 @@ func sysCpuList(path string) (map[uint64]struct{}, bool) {
 }
 
 // readProcCpuInfo reads /proc/cpuinfo.  The file is structured as a set of
-// blane-line-separated stanzas, and each stanza is a map of string to string,
+// blank-line-separated stanzas, and each stanza is a map of string to string,
 // with whitespace stripped.
 func readProcCpuInfo() ([]map[string]string, error) {
 	file, err := os.Open(testingPrefix + "/proc/cpuinfo")
