@@ -8,22 +8,13 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
-	"runtime"
 	"strings"
 	"time"
 )
 
 var dfCommand = "df"
-var dfOptions []string
+var dfOptions = []string{"-l", "-k"}
 var dfTimeout = 2 * time.Second
-
-func init() {
-	if runtime.GOOS == "darwin" {
-		dfOptions = []string{"-l", "-k"}
-	} else {
-		dfOptions = []string{"-l"}
-	}
-}
 
 func getFileSystemInfo() (interface{}, error) {
 
