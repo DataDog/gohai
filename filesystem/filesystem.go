@@ -24,6 +24,9 @@ func getFileSystemInfo() (interface{}, error) {
 	/* Grab filesystem data from df	*/
 	cmd := exec.CommandContext(ctx, dfCommand, dfOptions...)
 
+	// force output in the C locale (untranslated) so that we can recognize the headers
+	cmd.Env = []string{"LC_ALL=C"}
+
 	out, execErr := cmd.Output()
 	var parseErr error
 	var result []interface{}
