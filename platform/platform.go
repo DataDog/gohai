@@ -4,9 +4,6 @@
 package platform
 
 import (
-	"fmt"
-	"os/exec"
-	"regexp"
 	"runtime"
 	"strings"
 
