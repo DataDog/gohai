@@ -26,9 +26,6 @@ func Get() (*Platform, []string, error) {
 
 	p := &Platform{}
 	p.GoVersion = utils.GetString(platformInfo, "goV")
-	// Python version call was removed but we still want to report the field
-	// so as not to break code that depends on it.
-	p.PythonVersion = utils.GetString(platformInfo, "pythonV")
 	p.GoOS = utils.GetString(platformInfo, "GOOS")
 	p.GoArch = utils.GetString(platformInfo, "GOOARCH")
 	p.KernelName = utils.GetString(platformInfo, "kernel_name")
