@@ -74,6 +74,22 @@ go run make.go
 
 It will build gohai using the `go build` command, with the version info passed through `-ldflags`.
 
+## Development
+
+### Running the code
+
+Ensure that you have Golang installed. You can then run the `gohai` code with:
+
+```sh
+go run gohai.go log.go
+```
+
+### Running Unit Tests
+
+```sh
+go test ./...
+```
+
 ## Updating CPU Information
 
 Some information about CPUs is drawn from the source of the `util-linux` utility `lscpu`.
