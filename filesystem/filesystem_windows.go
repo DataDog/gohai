@@ -1,7 +1,9 @@
+//go:build windows
+// +build windows
+
 package filesystem
 
 import (
-	"strconv"
 	"syscall"
 	"unsafe"
 )
@@ -84,7 +86,7 @@ func getMountPoints(vol string) []string {
 	return convert_windows_string_list(buf)
 
 }
-func getFileSystemInfo() (interface{}, error) {
+func getFileSystemInfo() ([]MountInfo, error) {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var findFirst = mod.NewProc("FindFirstVolumeW")
 	var findNext = mod.NewProc("FindNextVolumeW")
@@ -96,34 +98,34 @@ func getFileSystemInfo() (interface{}, error) {
 	fh, _, _ := findFirst.Call(uintptr(unsafe.Pointer(&buf[0])),
 		uintptr(sz))
 	var findHandle Handle = Handle(fh)
-	var fileSystemInfo []interface{}
+	var fileSystemInfo []MountInfo
 
 	if findHandle != InvalidHandle {
 		defer findClose.Call(fh)
 		moreData := true
 		for moreData {
 			outstring := convert_windows_string(buf)
-			sz, _ := getDiskSize(outstring)
-			var capacity string
-			if 0 == sz {
-				capacity = "Unknown"
-			} else {
-				capacity = strconv.FormatInt(int64(sz)/1024.0, 10)
+
+			size, _ := getDiskSize(outstring)
+			sizeKB := uint64(0)
+			if size != 0 {
+				sizeKB = uint64(size) / 1024
 			}
+
 			mountpts := getMountPoints(outstring)
 			var mountName string
 			if len(mountpts) > 0 {
 				mountName = mountpts[0]
 			}
-			iface := map[string]interface{}{
-				"name":       outstring,
-				"kb_size":    capacity,
-				"mounted_on": mountName,
+			mountInfo := MountInfo{
+				Name:      outstring,
+				SizeKB:    sizeKB,
+				MountedOn: mountName,
 			}
-			fileSystemInfo = append(fileSystemInfo, iface)
+			fileSystemInfo = append(fileSystemInfo, mountInfo)
 			status, _, _ := findNext.Call(uintptr(fh),
 				uintptr(unsafe.Pointer(&buf[0])),
-				uintptr(sz))
+				uintptr(size))
 			if 0 == status {
 				moreData = false
 			}
