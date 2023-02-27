@@ -13,4 +13,4 @@ jobs:
       with:
         go-version: 1.17.x
     - name: Test
-      run: df --version && df -lk
+      run: df --version
