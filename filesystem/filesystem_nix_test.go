@@ -51,12 +51,12 @@ func TestOldMacosDf(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "975093952", "mounted_on": "/", "name": "/dev/disk0s2"},
 		map[string]string{"kb_size": "368", "mounted_on": "/dev", "name": "devfs"},
 		map[string]string{"kb_size": "0", "mounted_on": "/net", "name": "map -hosts"},
 		map[string]string{"kb_size": "0", "mounted_on": "/Volumes/Large", "name": "map -static"},
-	}), out)
+	}, out)
 }
 
 func TestDfLinux(t *testing.T) {
@@ -69,11 +69,11 @@ func TestDfLinux(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "16197480", "mounted_on": "/", "name": "/dev/root"},
 		map[string]string{"kb_size": "15381564", "mounted_on": "/dev", "name": "devtmpfs"},
 		map[string]string{"kb_size": "15388388", "mounted_on": "/dev/shm", "name": "tmpfs"},
-	}), out)
+	}, out)
 }
 
 func TestDfMac(t *testing.T) {
@@ -85,10 +85,10 @@ func TestDfMac(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "488245288", "mounted_on": "/", "name": "/dev/disk1s1s1"},
 		map[string]string{"kb_size": "488245288", "mounted_on": "/System/Volumes/VM", "name": "/dev/disk1s5"},
-	}), out)
+	}, out)
 }
 
 func TestDfWithVolumeSpaces(t *testing.T) {
@@ -100,10 +100,10 @@ func TestDfWithVolumeSpaces(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "367616", "mounted_on": "/Volumes/Firefox", "name": "/dev/disk4s3"},
 		map[string]string{"kb_size": "307200", "mounted_on": "/Volumes/MySQL Workbench community-8.0.30", "name": "/dev/disk5"},
-	}), out)
+	}, out)
 }
 
 func TestDfWithErrors(t *testing.T) {
@@ -116,10 +116,10 @@ func TestDfWithErrors(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "367616", "mounted_on": "/Volumes/Firefox", "name": "/dev/disk4s3"},
 		map[string]string{"kb_size": "307200", "mounted_on": "/Volumes/MySQL Workbench community-8.0.30", "name": "/dev/disk5"},
-	}), out)
+	}, out)
 }
 
 func TestFaileDfWithData(t *testing.T) {
@@ -128,9 +128,9 @@ func TestFaileDfWithData(t *testing.T) {
 
 	out, err := getFileSystemInfo()
 	require.NoError(t, err)
-	require.Equal(t, []interface{}([]interface{}{
+	require.Equal(t, []interface{}{
 		map[string]string{"kb_size": "488245288", "mounted_on": "/", "name": "/dev/disk1s1s1"},
-	}), out)
+	}, out)
 }
 
 func TestGetFileSystemInfo(t *testing.T) {
