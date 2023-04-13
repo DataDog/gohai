@@ -6,6 +6,7 @@
 //go:build linux || darwin
 // +build linux darwin
 
+// Package processes regroups collecting information about existing processes
 package processes
 
 import (
@@ -15,9 +16,12 @@ import (
 	"github.com/DataDog/gohai/processes/gops"
 )
 
+// ProcessField is an untyped representation of a process group,
+// compatible with the legacy "processes" resource check.
 type ProcessField [7]interface{}
 
-// Return a JSON payload that's compatible with the legacy "processes" resource check
+// getProcesses return a JSON payload which is compatible with
+// the legacy "processes" resource check
 func getProcesses(limit int) ([]interface{}, error) {
 	processGroups, err := gops.TopRSSProcessGroups(limit)
 	if err != nil {

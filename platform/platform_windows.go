@@ -168,7 +168,7 @@ func fetchWindowsVersion() (major uint64, minor uint64, build uint64, err error)
 	return
 }
 
-// GetArchInfo() returns basic host architecture information
+// GetArchInfo returns basic host architecture information
 func GetArchInfo() (systemInfo map[string]string, err error) {
 	systemInfo = map[string]string{}
 

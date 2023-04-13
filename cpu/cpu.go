@@ -3,6 +3,7 @@
 // Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
 // Copyright 2014-present Datadog, Inc.
 
+// Package cpu regroups collecting information about the CPU
 package cpu
 
 import (
@@ -48,16 +49,20 @@ type Cpu struct {
 
 const name = "cpu"
 
+// Name returns the name of the package
 func (self *Cpu) Name() string {
 	return name
 }
 
+// Collect collects the CPU information.
+// Returns an object which can be converted to a JSON or an error if nothing could be collected.
+// Tries to collect as much information as possible.
 func (self *Cpu) Collect() (result interface{}, err error) {
 	result, err = getCpuInfo()
 	return
 }
 
-// Get returns a Cpu struct already initialized, a list of warnings and an error. The method will try to collect as much
+// Get returns a CPU struct already initialized, a list of warnings and an error. The method will try to collect as much
 // metadata as possible, an error is returned if nothing could be collected. The list of warnings contains errors if
 // some metadata could not be collected.
 func Get() (*Cpu, []string, error) {
