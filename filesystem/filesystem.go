@@ -23,7 +23,6 @@ var dfOptions = []string{"-l", "-k"}
 var dfTimeout = 2 * time.Second
 
 func getFileSystemInfo() (interface{}, error) {
-
 	ctx, cancel := context.WithTimeout(context.Background(), dfTimeout)
 	defer cancel()
 

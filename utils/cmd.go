@@ -3,7 +3,7 @@
 // Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
 // Copyright 2014-present Datadog, Inc.
 
-// Package utils contains helper functions used accross the project
+// Package utils contains helper functions used across the project
 package utils
 
 import (

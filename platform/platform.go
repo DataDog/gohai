@@ -63,7 +63,7 @@ func getPlatformInfo() (platformInfo map[string]string, warnings []string, err e
 		platformInfo = map[string]string{}
 	}
 
-	platformInfo["goV"] = strings.Replace(runtime.Version(), "go", "", -1)
+	platformInfo["goV"] = strings.ReplaceAll(runtime.Version(), "go", "")
 	platformInfo["GOOS"] = runtime.GOOS
 	platformInfo["GOOARCH"] = runtime.GOARCH
 
