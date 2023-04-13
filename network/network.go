@@ -15,13 +15,13 @@ func getNetworkInfo() (networkInfo map[string]interface{}, err error) {
 	}
 	networkInfo["macaddress"] = macaddress
 
-	ipAddress, err := externalIpAddress()
+	ipAddress, err := externalIPAddress()
 	if err != nil {
 		return networkInfo, err
 	}
 	networkInfo["ipaddress"] = ipAddress
 
-	ipAddressV6, err := externalIpv6Address()
+	ipAddressV6, err := externalIPv6Address()
 	if err != nil {
 		return networkInfo, err
 	}
