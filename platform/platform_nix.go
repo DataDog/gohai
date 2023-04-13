@@ -23,7 +23,7 @@ func GetArchInfo() (archInfo map[string]string, err error) {
 	if err != nil {
 		return nil, err
 	}
-	line := fmt.Sprintf("%s", out)
+	line := string(out)
 	values := regexp.MustCompile(" +").Split(line, 7)
 	updateArchInfo(archInfo, values)
 

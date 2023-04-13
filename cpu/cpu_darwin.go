@@ -23,7 +23,6 @@ var cpuMap = map[string]string{
 }
 
 func getCpuInfo() (cpuInfo map[string]string, err error) {
-
 	cpuInfo = make(map[string]string)
 
 	for option, key := range cpuMap {

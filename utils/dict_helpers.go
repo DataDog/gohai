@@ -46,7 +46,7 @@ func GetUint64(dict map[string]string, key string, warnings *[]string) uint64 {
 // GetFloat64 returns the dict[key] or an empty uint64 if the entry doesn't exists
 func GetFloat64(dict map[string]string, key string, warnings *[]string) float64 {
 	if v, ok := dict[key]; ok {
-		num, err := strconv.ParseFloat(v, 10)
+		num, err := strconv.ParseFloat(v, 64)
 		if err == nil {
 			return num
 		}
