@@ -17,14 +17,14 @@ type Memory struct {
 const name = "memory"
 
 // Name returns the name of the package
-func (self *Memory) Name() string {
+func (memory *Memory) Name() string {
 	return name
 }
 
 // Collect collects the Memory information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *Memory) Collect() (result interface{}, err error) {
+func (memory *Memory) Collect() (result interface{}, err error) {
 	result, err = getMemoryInfo()
 	return
 }

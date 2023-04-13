@@ -11,14 +11,14 @@ type FileSystem struct{}
 const name = "filesystem"
 
 // Name returns the name of the package
-func (self *FileSystem) Name() string {
+func (filesystem *FileSystem) Name() string {
 	return name
 }
 
 // Collect collects the filesystem information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *FileSystem) Collect() (result interface{}, err error) {
+func (filesystem *FileSystem) Collect() (result interface{}, err error) {
 	result, err = getFileSystemInfo()
 	return
 }

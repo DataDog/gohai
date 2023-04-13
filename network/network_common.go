@@ -28,14 +28,14 @@ type Network struct {
 const name = "network"
 
 // Name returns the name of the package
-func (self *Network) Name() string {
+func (network *Network) Name() string {
 	return name
 }
 
 // Collect collects the Network information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *Network) Collect() (result interface{}, err error) {
+func (network *Network) Collect() (result interface{}, err error) {
 	result, err = getNetworkInfo()
 	if err != nil {
 		return

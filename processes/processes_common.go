@@ -21,14 +21,14 @@ func init() {
 }
 
 // Name returns the name of the package
-func (self *Processes) Name() string {
+func (processes *Processes) Name() string {
 	return name
 }
 
 // Collect collects the processes information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *Processes) Collect() (result interface{}, err error) {
+func (processes *Processes) Collect() (result interface{}, err error) {
 	// even if getProcesses returns nil, simply assigning to result
 	// will have a non-nil return, because it has a valid inner
 	// type (more info here: https://golang.org/doc/faq#nil_error )

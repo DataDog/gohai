@@ -50,14 +50,14 @@ type Cpu struct {
 const name = "cpu"
 
 // Name returns the name of the package
-func (self *Cpu) Name() string {
+func (cpu *Cpu) Name() string {
 	return name
 }
 
 // Collect collects the CPU information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *Cpu) Collect() (result interface{}, err error) {
+func (cpu *Cpu) Collect() (result interface{}, err error) {
 	result, err = getCpuInfo()
 	return
 }

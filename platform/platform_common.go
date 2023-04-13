@@ -40,6 +40,6 @@ type Platform struct {
 const name = "platform"
 
 // Name returns the name of the package
-func (self *Platform) Name() string {
+func (platform *Platform) Name() string {
 	return name
 }

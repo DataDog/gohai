@@ -11,7 +11,7 @@ package platform
 // Collects the Platform information.
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
-func (self *Platform) Collect() (interface{}, error) {
+func (platform *Platform) Collect() (interface{}, error) {
 	return nil, nil
 }
 
