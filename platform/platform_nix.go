@@ -9,7 +9,6 @@
 package platform
 
 import (
-	"fmt"
 	"os/exec"
 	"regexp"
 	"strings"
