@@ -6,4 +6,4 @@
 package gops
 
 // Do nothing for now
-func postProcess(processInfos []*ProcessInfo) {}
+func postProcess(_ []*ProcessInfo) {}

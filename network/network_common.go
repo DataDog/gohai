@@ -113,8 +113,6 @@ func getMultiNetworkInfo() (multiNetworkInfo []map[string]interface{}, err error
 	return multiNetworkInfo, err
 }
 
-type IPv6Address struct{}
-
 func externalIPv6Address() (string, error) {
 	ifaces, err := net.Interfaces()
 
@@ -157,8 +155,6 @@ func externalIPv6Address() (string, error) {
 	return "", nil
 }
 
-type IPAddress struct{}
-
 func externalIPAddress() (string, error) {
 	ifaces, err := net.Interfaces()
 
@@ -196,8 +192,6 @@ func externalIPAddress() (string, error) {
 	}
 	return "", errors.New("not connected to the network")
 }
-
-type MacAddress struct{}
 
 func macAddress() (string, error) {
 	ifaces, err := net.Interfaces()

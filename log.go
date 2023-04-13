@@ -29,15 +29,15 @@ type StdErrReceiver struct{}
 // ReceiveMessage is called when the custom receiver gets seelog message from
 // a parent dispatcher.
 // See seelog.CustomReceiver.
-func (sr *StdErrReceiver) ReceiveMessage(message string, level log.LogLevel, context log.LogContextInterface) error {
-	fmt.Fprintf(os.Stderr, message)
+func (sr *StdErrReceiver) ReceiveMessage(message string, _ log.LogLevel, _ log.LogContextInterface) error {
+	fmt.Fprint(os.Stderr, message)
 	return nil
 }
 
 // AfterParse is called immediately after your custom receiver is instantiated by
 // the xml config parser.
 // See seelog.CustomReceiver.
-func (sr *StdErrReceiver) AfterParse(initArgs log.CustomReceiverInitArgs) error {
+func (sr *StdErrReceiver) AfterParse(_ log.CustomReceiverInitArgs) error {
 	return nil
 }
 
