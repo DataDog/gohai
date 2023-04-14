@@ -66,7 +66,11 @@ func getMountPoints(vol string) []string {
 	var objlistsize uint32 = 0x0
 	var retval []string
 
-	status, _, errno := getPaths.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(vol))),
+	volWinStr, err := syscall.UTF16PtrFromString(vol)
+	if err != nil {
+		return retval
+	}
+	status, _, errno := getPaths.Call(uintptr(unsafe.Pointer(volWinStr)),
 		uintptr(unsafe.Pointer(&tmp)),
 		2,
 		uintptr(unsafe.Pointer(&objlistsize)))
@@ -75,8 +79,9 @@ func getMountPoints(vol string) []string {
 		// unexpected
 		return retval
 	}
+
 	buf := make([]uint16, objlistsize)
-	status, _, _ = getPaths.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(vol))),
+	status, _, _ = getPaths.Call(uintptr(unsafe.Pointer(volWinStr)),
 		uintptr(unsafe.Pointer(&buf[0])),
 		uintptr(objlistsize),
 		uintptr(unsafe.Pointer(&objlistsize)))
