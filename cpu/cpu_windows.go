@@ -18,15 +18,10 @@ import (
 
 var getCpuInfo = GetCpuInfo
 
-// Values that need to be multiplied by the number of physical processors
-var perPhysicalProcValues = []string{
-	"cpu_cores",
-	"cpu_logical_processors",
-}
-
 const ERROR_INSUFFICIENT_BUFFER syscall.Errno = 122
 const registryHive = "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"
 
+//nolint:unused
 type CACHE_DESCRIPTOR struct {
 	Level         uint8
 	Associativity uint8
@@ -34,6 +29,8 @@ type CACHE_DESCRIPTOR struct {
 	Size          uint32
 	cacheType     uint32
 }
+
+//nolint:unused
 type SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct {
 	ProcessorMask uintptr
 	Relationship  int // enum (int)
@@ -49,11 +46,13 @@ type GROUP_AFFINITY struct {
 	Group    uint16
 	Reserved [3]uint16
 }
+
 type NUMA_NODE_RELATIONSHIP struct {
 	NodeNumber uint32
 	Reserved   [20]uint8
 	GroupMask  GROUP_AFFINITY
 }
+
 type CACHE_RELATIONSHIP struct {
 	Level         uint8
 	Associativity uint8
@@ -70,12 +69,15 @@ type PROCESSOR_GROUP_INFO struct {
 	Reserved              [38]uint8
 	ActiveProcessorMask   uintptr
 }
+
 type GROUP_RELATIONSHIP struct {
 	MaximumGroupCount uint16
 	ActiveGroupCount  uint16
 	Reserved          [20]uint8
 	// variable size array of PROCESSOR_GROUP_INFO
 }
+
+//nolint:unused
 type PROCESSOR_RELATIONSHIP struct {
 	Flags           uint8
 	EfficiencyClass uint8

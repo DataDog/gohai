@@ -13,9 +13,12 @@ import (
 
 const SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE = 32
 
+//nolint:unused
 func getSystemLogicalProcessorInformationSize() int {
 	return SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE
 }
+
+//nolint:unused
 func byteArrayToProcessorStruct(data []byte) (info SYSTEM_LOGICAL_PROCESSOR_INFORMATION) {
 	info.ProcessorMask = uintptr(binary.LittleEndian.Uint64(data))
 	info.Relationship = int(binary.LittleEndian.Uint64(data[8:]))
@@ -44,7 +47,7 @@ func byteArrayToProcessorInformationExStruct(data []byte) (info SYSTEM_LOGICAL_P
 func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIONSHIP, groupMask []GROUP_AFFINITY, consumed uint32, err error) {
 	err = nil
 	proc.Flags = uint8(data[0])
-	proc.EfficiencyClass = uint8(data[1])
+	proc.EfficiencyClass = data[1]
 	proc.GroupCount = uint16(binary.LittleEndian.Uint32(data[22:]))
 	consumed = 24
 	if proc.GroupCount != 0 {
@@ -77,7 +80,7 @@ func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uin
 }
 
 func byteArrayToRelationCache(data []byte) (cache CACHE_RELATIONSHIP, consumed uint32, err error) {
-	cache.Level = uint8(data[0])
+	cache.Level = data[0]
 	cache.Associativity = uint8(data[1])
 	cache.LineSize = uint16(binary.LittleEndian.Uint16(data[2:]))
 	cache.CacheSize = uint32(binary.LittleEndian.Uint32(data[4:]))
@@ -99,9 +102,9 @@ func byteArrayToRelationGroup(data []byte) (group GROUP_RELATIONSHIP, gi []PROCE
 		groups := make([]PROCESSOR_GROUP_INFO, group.ActiveGroupCount)
 		for i := uint16(0); i < group.ActiveGroupCount; i++ {
 			groups[i].MaximumProcessorCount = uint8(data[consumed])
-			consumed += 1
+			consumed++
 			groups[i].ActiveProcessorCount = uint8(data[consumed])
-			consumed += 1
+			consumed++
 			consumed += 38 // reserved
 			groups[i].ActiveProcessorMask = uintptr(binary.LittleEndian.Uint64(data[consumed:]))
 			consumed += 8
@@ -113,7 +116,7 @@ func byteArrayToRelationGroup(data []byte) (group GROUP_RELATIONSHIP, gi []PROCE
 func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var getProcInfo = mod.NewProc("GetLogicalProcessorInformationEx")
-	var buflen uint32 = 0
+	var buflen uint32
 
 	err = syscall.Errno(0)
 	// first, figure out how much we need

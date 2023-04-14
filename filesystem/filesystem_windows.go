@@ -102,7 +102,7 @@ func getFileSystemInfo() (interface{}, error) {
 	var sz int32 = 512
 	fh, _, _ := findFirst.Call(uintptr(unsafe.Pointer(&buf[0])),
 		uintptr(sz))
-	var findHandle Handle = Handle(fh)
+	var findHandle = Handle(fh)
 	var fileSystemInfo []interface{}
 
 	if findHandle != InvalidHandle {
@@ -128,7 +128,7 @@ func getFileSystemInfo() (interface{}, error) {
 				"mounted_on": mountName,
 			}
 			fileSystemInfo = append(fileSystemInfo, iface)
-			status, _, _ := findNext.Call(uintptr(fh),
+			status, _, _ := findNext.Call(fh,
 				uintptr(unsafe.Pointer(&buf[0])),
 				uintptr(sz))
 			if 0 == status {
