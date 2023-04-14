@@ -72,7 +72,7 @@ func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIO
 
 func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uint32, err error) {
 	err = nil
-	numa.NodeNumber = uint32(binary.LittleEndian.Uint32(data))
+	numa.NodeNumber = binary.LittleEndian.Uint32(data)
 	// skip 20 bytes of reserved
 	consumed = 24
 	aff, used, err := byteArrayToGroupAffinity(data[consumed:])
@@ -83,7 +83,7 @@ func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uin
 
 func byteArrayToRelationCache(data []byte) (cache CACHE_RELATIONSHIP, consumed uint32, err error) {
 	cache.Level = data[0]
-	cache.Associativity = uint8(data[1])
+	cache.Associativity = data[1]
 	cache.LineSize = uint16(binary.LittleEndian.Uint16(data[2:]))
 	cache.CacheSize = uint32(binary.LittleEndian.Uint32(data[4:]))
 	cache.CacheType = int(binary.LittleEndian.Uint32(data[8:]))
@@ -103,9 +103,9 @@ func byteArrayToRelationGroup(data []byte) (group GROUP_RELATIONSHIP, gi []PROCE
 	if group.ActiveGroupCount > 0 {
 		groups := make([]PROCESSOR_GROUP_INFO, group.ActiveGroupCount)
 		for i := uint16(0); i < group.ActiveGroupCount; i++ {
-			groups[i].MaximumProcessorCount = uint8(data[consumed])
+			groups[i].MaximumProcessorCount = data[consumed]
 			consumed++
-			groups[i].ActiveProcessorCount = uint8(data[consumed])
+			groups[i].ActiveProcessorCount = data[consumed]
 			consumed++
 			consumed += 38 // reserved
 			groups[i].ActiveProcessorMask = uintptr(binary.LittleEndian.Uint64(data[consumed:]))

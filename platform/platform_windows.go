@@ -38,13 +38,13 @@ type OSVERSIONINFOEXW struct {
 }
 
 var (
-	modNetapi32                        = windows.NewLazyDLL("Netapi32.dll")
-	procNetServerGetInfo               = modNetapi32.NewProc("NetServerGetInfo")
-	procNetAPIBufferFree               = modNetapi32.NewProc("NetApiBufferFree")
-	ntdll                              = windows.NewLazyDLL("Ntdll.dll")
-	procRtlGetVersion                  = ntdll.NewProc("RtlGetVersion")
-	winbrand                           = windows.NewLazyDLL("winbrand.dll")
-	ERROR_SUCCESS        syscall.Errno = 0
+	modNetapi32          = windows.NewLazyDLL("Netapi32.dll")
+	procNetServerGetInfo = modNetapi32.NewProc("NetServerGetInfo")
+	procNetAPIBufferFree = modNetapi32.NewProc("NetApiBufferFree")
+	ntdll                = windows.NewLazyDLL("Ntdll.dll")
+	procRtlGetVersion    = ntdll.NewProc("RtlGetVersion")
+	winbrand             = windows.NewLazyDLL("winbrand.dll")
+	ERROR_SUCCESS        syscall.Errno
 )
 
 // see https://learn.microsoft.com/en-us/windows/win32/api/lmserver/nf-lmserver-netserverenum
