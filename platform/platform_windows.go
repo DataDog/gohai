@@ -21,6 +21,8 @@ import (
 // OSVERSIONINFOEXW contains operating system version information.
 // From winnt.h (see https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-osversioninfoexw)
 // This is used by https://docs.microsoft.com/en-us/windows/win32/devnotes/rtlgetversion
+//
+//nolint:revive
 type OSVERSIONINFOEXW struct {
 	dwOSVersionInfoSize uint32
 	dwMajorVersion      uint32
@@ -38,7 +40,7 @@ type OSVERSIONINFOEXW struct {
 var (
 	modNetapi32                        = windows.NewLazyDLL("Netapi32.dll")
 	procNetServerGetInfo               = modNetapi32.NewProc("NetServerGetInfo")
-	procNetApiBufferFree               = modNetapi32.NewProc("NetApiBufferFree")
+	procNetAPIBufferFree               = modNetapi32.NewProc("NetApiBufferFree")
 	ntdll                              = windows.NewLazyDLL("Ntdll.dll")
 	procRtlGetVersion                  = ntdll.NewProc("RtlGetVersion")
 	winbrand                           = windows.NewLazyDLL("winbrand.dll")
@@ -46,6 +48,8 @@ var (
 )
 
 // see https://learn.microsoft.com/en-us/windows/win32/api/lmserver/nf-lmserver-netserverenum
+//
+//nolint:revive
 const (
 	// SV_TYPE_WORKSTATION is for all workstations.
 	SV_TYPE_WORKSTATION = uint32(0x00000001)
@@ -134,7 +138,7 @@ func netServerGetInfo() (si SERVER_INFO_101, err error) {
 	if status != uintptr(0) {
 		return
 	}
-	defer procNetApiBufferFree.Call(uintptr(unsafe.Pointer(outdata)))
+	defer procNetAPIBufferFree.Call(uintptr(unsafe.Pointer(outdata)))
 	return platGetServerInfo(outdata), nil
 }
 

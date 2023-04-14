@@ -16,11 +16,11 @@ type Handle uintptr
 
 // InvalidHandle is the value returned in case of error
 const InvalidHandle Handle = Handle(^Handle(0))
-const ERROR_moreData syscall.Errno = 234
+const ERRORMoreData syscall.Errno = 234
 
 // this would probably go in a common utilities rather than here
 
-func convert_windows_string_list(winput []uint16) []string {
+func convertWindowsStringList(winput []uint16) []string {
 	var retstrings []string
 	var rsindex = 0
 
@@ -40,7 +40,7 @@ func convert_windows_string_list(winput []uint16) []string {
 }
 
 // as would this
-func convert_windows_string(winput []uint16) string {
+func convertWindowsString(winput []uint16) string {
 	var retstring string
 	for i := 0; i < len(winput); i++ {
 		if winput[i] == 0 {
@@ -76,7 +76,7 @@ func getMountPoints(vol string) []string {
 		2,
 		uintptr(unsafe.Pointer(&objlistsize)))
 
-	if status != 0 || errno != ERROR_moreData {
+	if status != 0 || errno != ERRORMoreData {
 		// unexpected
 		return retval
 	}
@@ -88,7 +88,7 @@ func getMountPoints(vol string) []string {
 	if status == 0 {
 		return retval
 	}
-	return convert_windows_string_list(buf)
+	return convertWindowsStringList(buf)
 
 }
 func getFileSystemInfo() (interface{}, error) {
@@ -109,7 +109,7 @@ func getFileSystemInfo() (interface{}, error) {
 		defer findClose.Call(fh)
 		moreData := true
 		for moreData {
-			outstring := convert_windows_string(buf)
+			outstring := convertWindowsString(buf)
 			sz, _ := getDiskSize(outstring)
 			var capacity string
 			if 0 == sz {

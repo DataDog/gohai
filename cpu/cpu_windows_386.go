@@ -11,6 +11,7 @@ import (
 	"unsafe"
 )
 
+//nolint:revive
 const SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE = 24
 
 func getSystemLogicalProcessorInformationSize() int {
