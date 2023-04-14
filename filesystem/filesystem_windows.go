@@ -11,8 +11,10 @@ import (
 	"unsafe"
 )
 
+// Handle represents a pointer used by FindFirstVolumeW and similar functions
 type Handle uintptr
 
+// InvalidHandle is the value returned in case of error
 const InvalidHandle Handle = Handle(^Handle(0))
 const ERROR_moreData syscall.Errno = 234
 

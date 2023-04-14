@@ -94,11 +94,18 @@ type SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX struct {
 	// GROUP_RELATIONSHIP
 }
 
-const RelationProcessorCore = 0
-const RelationNumaNode = 1
-const RelationCache = 2
-const RelationProcessorPackage = 3
-const RelationGroup = 4
+const (
+	// RelationProcessorCore retrieves information about logical processors that share a single processor core.
+	RelationProcessorCore = 0
+	// RelationNumaNode retrieves information about logical processors that are part of the same NUMA node.
+	RelationNumaNode = 1
+	// RelationCache retrieves information about logical processors that share a cache.
+	RelationCache = 2
+	// RelationProcessorPackage retrieves information about logical processors that share a physical package.
+	RelationProcessorPackage = 3
+	// RelationGroup retrieves information about logical processors that share a processor group.
+	RelationGroup = 4
+)
 
 type SYSTEM_INFO struct {
 	wProcessorArchitecture  uint16

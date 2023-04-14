@@ -3,6 +3,7 @@
 // Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
 // Copyright 2014-present Datadog, Inc.
 
+// Package processes regroups collecting information about running processes.
 package processes
 
 import "flag"
