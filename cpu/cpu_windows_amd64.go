@@ -13,6 +13,8 @@ import (
 
 // SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE is the size of
 // SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct
+//
+//nolint:revive
 const SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE = 32
 
 //nolint:unused
