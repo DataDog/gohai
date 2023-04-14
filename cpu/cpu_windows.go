@@ -20,6 +20,8 @@ var getCpuInfo = GetCpuInfo
 
 // ERROR_INSUFFICIENT_BUFFER is the error number associated with the
 // "insufficient buffer size" error
+//
+//nolint:revive
 const ERROR_INSUFFICIENT_BUFFER syscall.Errno = 122
 
 const registryHive = "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"

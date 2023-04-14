@@ -44,7 +44,9 @@ var (
 	ntdll                = windows.NewLazyDLL("Ntdll.dll")
 	procRtlGetVersion    = ntdll.NewProc("RtlGetVersion")
 	winbrand             = windows.NewLazyDLL("winbrand.dll")
-	ERROR_SUCCESS        syscall.Errno
+
+	// ERROR_SUCCESS is the error returned in case of success
+	ERROR_SUCCESS syscall.Errno
 )
 
 // see https://learn.microsoft.com/en-us/windows/win32/api/lmserver/nf-lmserver-netserverenum
