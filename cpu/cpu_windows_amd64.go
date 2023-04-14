@@ -61,7 +61,6 @@ func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIO
 }
 
 func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uint32, err error) {
-	err = nil
 	numa.NodeNumber = uint32(binary.LittleEndian.Uint32(data))
 	// skip 20 bytes of reserved
 	consumed = 24
@@ -110,7 +109,6 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 	var getProcInfo = mod.NewProc("GetLogicalProcessorInformationEx")
 	var buflen uint32 = 0
 
-	err = syscall.Errno(0)
 	// first, figure out how much we need
 	status, _, err := getProcInfo.Call(uintptr(0xFFFF), // all relationships.
 		uintptr(0),
