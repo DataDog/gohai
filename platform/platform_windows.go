@@ -113,6 +113,8 @@ func fetchOsDescription() (string, error) {
 				// ignore free errors
 				//nolint:errcheck
 				defer syscall.LocalFree(syscall.Handle(os))
+				// govet complains about possible misuse of unsafe.Pointer here
+				//nolint:govet
 				return windows.UTF16PtrToString((*uint16)(unsafe.Pointer(os))), nil
 			}
 		}
