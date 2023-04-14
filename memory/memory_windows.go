@@ -12,6 +12,8 @@ import (
 )
 
 // MEMORYSTATUSEX is the type of the struct expected by GlobalMemoryStatusEx
+//
+//nolint:revive
 type MEMORYSTATUSEX struct {
 	dwLength               uint32 // size of this structure
 	dwMemoryLoad           uint32 // number 0-100 estimating %age of memory in use
