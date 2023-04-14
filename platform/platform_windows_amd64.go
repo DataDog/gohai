@@ -56,6 +56,8 @@ func byteArrayToWksaInfo(data []byte) (info WKSTA_INFO_100) {
 	info.wki100_ver_minor = binary.LittleEndian.Uint32(data[28:])
 	return
 }
+
+//nolint:unused
 func platGetVersion(outdata *byte) (maj uint64, min uint64, err error) {
 	var info WKSTA_INFO_100
 	var dataptr []byte
