@@ -94,6 +94,8 @@ func netServerGetInfo() (si SERVER_INFO_101, err error) {
 	if status != uintptr(0) {
 		return
 	}
+	// ignore free errors
+	//nolint:staticcheck
 	defer procNetApiBufferFree.Call(uintptr(unsafe.Pointer(outdata)))
 	return platGetServerInfo(outdata), nil
 }
@@ -108,6 +110,8 @@ func fetchOsDescription() (string, error) {
 			magicString := utf16.Encode([]rune("%WINDOWS_LONG%" + "\x00"))
 			os, _, err := procBrandingFormatString.Call(uintptr(unsafe.Pointer(&magicString[0])))
 			if err == ERROR_SUCESS {
+				// ignore free errors
+				//nolint:errcheck
 				defer syscall.LocalFree(syscall.Handle(os))
 				return windows.UTF16PtrToString((*uint16)(unsafe.Pointer(os))), nil
 			}
@@ -118,6 +122,8 @@ func fetchOsDescription() (string, error) {
 		registryHive,
 		registry.QUERY_VALUE)
 	if err == nil {
+		// ignore registry key close errors
+		//nolint:staticcheck
 		defer k.Close()
 		os, _, err := k.GetStringValue(productNameKey)
 		if err == nil {
@@ -143,6 +149,8 @@ func fetchWindowsVersion() (major uint64, minor uint64, build uint64, err error)
 		if err != nil {
 			return
 		}
+		// ignore registry key close errors
+		//nolint:staticcheck
 		defer regkey.Close()
 		major, _, err = regkey.GetIntegerValue(majorKey)
 		if err != nil {

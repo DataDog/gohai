@@ -43,6 +43,7 @@ func convert_windows_string(winput []uint16) string {
 	}
 	return retstring
 }
+
 func getDiskSize(vol string) (size uint64, freespace uint64) {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var getDisk = mod.NewProc("GetDiskFreeSpaceExW")
@@ -57,6 +58,7 @@ func getDiskSize(vol string) (size uint64, freespace uint64) {
 	}
 	return sz, fr
 }
+
 func getMountPoints(vol string) []string {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var getPaths = mod.NewProc("GetVolumePathNamesForVolumeNameW")
@@ -84,6 +86,7 @@ func getMountPoints(vol string) []string {
 	return convert_windows_string_list(buf)
 
 }
+
 func getFileSystemInfo() (interface{}, error) {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var findFirst = mod.NewProc("FindFirstVolumeW")
@@ -99,6 +102,8 @@ func getFileSystemInfo() (interface{}, error) {
 	var fileSystemInfo []interface{}
 
 	if findHandle != InvalidHandle {
+		// ignore close error
+		//nolint:staticcheck
 		defer findClose.Call(fh)
 		moreData := true
 		for moreData {

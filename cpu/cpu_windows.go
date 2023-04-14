@@ -138,6 +138,8 @@ func getSystemInfo() (si SYSTEM_INFO) {
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var gsi = mod.NewProc("GetSystemInfo")
 
+	// syscall does not fail
+	//nolint:errcheck
 	gsi.Call(uintptr(unsafe.Pointer(&si)))
 	return
 }
@@ -150,6 +152,8 @@ func GetCpuInfo() (cpuInfo map[string]string, err error) {
 		registryHive,
 		registry.QUERY_VALUE)
 	if err == nil {
+		// ignore registry key close errors
+		//nolint:staticcheck
 		defer k.Close()
 
 		dw, _, err := k.GetIntegerValue("~MHz")
