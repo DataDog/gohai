@@ -18,9 +18,15 @@ import (
 
 var getCPUInfo = GetCPUInfo
 
+// ERROR_INSUFFICIENT_BUFFER is the error number associated with the
+// "insufficient buffer size" error
 const ERROR_INSUFFICIENT_BUFFER syscall.Errno = 122
+
 const registryHive = "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"
 
+// CACHE_DESCRIPTOR contains cache related information
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-cache_descriptor
+//
 //nolint:unused
 type CACHE_DESCRIPTOR struct {
 	Level         uint8
@@ -30,6 +36,10 @@ type CACHE_DESCRIPTOR struct {
 	cacheType     uint32
 }
 
+// SYSTEM_LOGICAL_PROCESSOR_INFORMATION describes the relationship
+// between the specified processor set.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-system_logical_processor_information
+//
 //nolint:unused
 type SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct {
 	ProcessorMask uintptr
@@ -41,18 +51,26 @@ type SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct {
 
 //.const SYSTEM_LOGICAL_PROCESSOR_INFORMATION_SIZE = 32
 
+// GROUP_AFFINITY represents a processor group-specific affinity,
+// such as the affinity of a thread.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-group_affinity
 type GROUP_AFFINITY struct {
 	Mask     uintptr
 	Group    uint16
 	Reserved [3]uint16
 }
 
+// NUMA_NODE_RELATIONSHIP represents information about a NUMA node
+// in a processor group.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-numa_node_relationship
 type NUMA_NODE_RELATIONSHIP struct {
 	NodeNumber uint32
 	Reserved   [20]uint8
 	GroupMask  GROUP_AFFINITY
 }
 
+// CACHE_RELATIONSHIP describes cache attributes.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-cache_relationship
 type CACHE_RELATIONSHIP struct {
 	Level         uint8
 	Associativity uint8
@@ -63,6 +81,9 @@ type CACHE_RELATIONSHIP struct {
 	GroupMask     GROUP_AFFINITY
 }
 
+// PROCESSOR_GROUP_INFO represents the number and affinity of processors
+// in a processor group.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-processor_group_info
 type PROCESSOR_GROUP_INFO struct {
 	MaximumProcessorCount uint8
 	ActiveProcessorCount  uint8
@@ -70,6 +91,8 @@ type PROCESSOR_GROUP_INFO struct {
 	ActiveProcessorMask   uintptr
 }
 
+// GROUP_RELATIONSHIP represents information about processor groups.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-group_relationship
 type GROUP_RELATIONSHIP struct {
 	MaximumGroupCount uint16
 	ActiveGroupCount  uint16
@@ -77,6 +100,10 @@ type GROUP_RELATIONSHIP struct {
 	// variable size array of PROCESSOR_GROUP_INFO
 }
 
+// PROCESSOR_RELATIONSHIP represents information about affinity
+// within a processor group.
+// see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-processor_relationship
+//
 //nolint:unused
 type PROCESSOR_RELATIONSHIP struct {
 	Flags           uint8
@@ -86,6 +113,9 @@ type PROCESSOR_RELATIONSHIP struct {
 	// what follows is an array of zero or more GROUP_AFFINITY structures
 }
 
+// SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX contains information about
+// the relationships of logical processors and related hardware.
+// https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-system_logical_processor_information_ex
 type SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX struct {
 	Relationship int
 	Size         uint32
@@ -96,19 +126,29 @@ type SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX struct {
 	// GROUP_RELATIONSHIP
 }
 
+// see https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getlogicalprocessorinformationex
 const (
-	// RelationProcessorCore retrieves information about logical processors that share a single processor core.
+	// RelationProcessorCore retrieves information about logical processors
+	// that share a single processor core.
 	RelationProcessorCore = 0
-	// RelationNumaNode retrieves information about logical processors that are part of the same NUMA node.
+	// RelationNumaNode retrieves information about logical processors
+	// that are part of the same NUMA node.
 	RelationNumaNode = 1
-	// RelationCache retrieves information about logical processors that share a cache.
+	// RelationCache retrieves information about logical processors
+	// that share a cache.
 	RelationCache = 2
-	// RelationProcessorPackage retrieves information about logical processors that share a physical package.
+	// RelationProcessorPackage retrieves information about logical processors
+	// that share a physical package.
 	RelationProcessorPackage = 3
-	// RelationGroup retrieves information about logical processors that share a processor group.
+	// RelationGroup retrieves information about logical processors
+	// that share a processor group.
 	RelationGroup = 4
 )
 
+// SYSTEM_INFO contains information about the current computer system.
+// This includes the architecture and type of the processor, the number
+// of processors in the system, the page size, and other such information.
+// see https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/ns-sysinfoapi-system_info
 type SYSTEM_INFO struct {
 	wProcessorArchitecture  uint16
 	wReserved               uint16
@@ -123,6 +163,7 @@ type SYSTEM_INFO struct {
 	wProcessorRevision      uint16
 }
 
+// CPU_INFO contains information about cpu, eg. number of cores, cache size
 type CPU_INFO struct {
 	numaNodeCount       int    // number of NUMA nodes
 	pkgcount            int    // number of packages (physical CPUS)

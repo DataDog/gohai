@@ -16,6 +16,8 @@ type Handle uintptr
 
 // InvalidHandle is the value returned in case of error
 const InvalidHandle Handle = Handle(^Handle(0))
+
+// ERRORMoreData is the error returned when the size is not big enough
 const ERRORMoreData syscall.Errno = 234
 
 // this would probably go in a common utilities rather than here
