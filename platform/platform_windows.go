@@ -46,6 +46,8 @@ var (
 	winbrand             = windows.NewLazyDLL("winbrand.dll")
 
 	// ERROR_SUCCESS is the error returned in case of success
+	//
+	//nolint:revive
 	ERROR_SUCCESS syscall.Errno
 )
 
