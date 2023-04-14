@@ -27,7 +27,7 @@ const registryHive = "HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"
 // CACHE_DESCRIPTOR contains cache related information
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-cache_descriptor
 //
-//nolint:unused
+//nolint:unused,revive
 type CACHE_DESCRIPTOR struct {
 	Level         uint8
 	Associativity uint8
@@ -40,7 +40,7 @@ type CACHE_DESCRIPTOR struct {
 // between the specified processor set.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-system_logical_processor_information
 //
-//nolint:unused
+//nolint:unused,revive
 type SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct {
 	ProcessorMask uintptr
 	Relationship  int // enum (int)
@@ -54,6 +54,8 @@ type SYSTEM_LOGICAL_PROCESSOR_INFORMATION struct {
 // GROUP_AFFINITY represents a processor group-specific affinity,
 // such as the affinity of a thread.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-group_affinity
+//
+//nolint:revive
 type GROUP_AFFINITY struct {
 	Mask     uintptr
 	Group    uint16
@@ -63,6 +65,8 @@ type GROUP_AFFINITY struct {
 // NUMA_NODE_RELATIONSHIP represents information about a NUMA node
 // in a processor group.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-numa_node_relationship
+//
+//nolint:revive
 type NUMA_NODE_RELATIONSHIP struct {
 	NodeNumber uint32
 	Reserved   [20]uint8
@@ -71,6 +75,8 @@ type NUMA_NODE_RELATIONSHIP struct {
 
 // CACHE_RELATIONSHIP describes cache attributes.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-cache_relationship
+//
+//nolint:revive
 type CACHE_RELATIONSHIP struct {
 	Level         uint8
 	Associativity uint8
@@ -84,6 +90,8 @@ type CACHE_RELATIONSHIP struct {
 // PROCESSOR_GROUP_INFO represents the number and affinity of processors
 // in a processor group.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-processor_group_info
+//
+//nolint:revive
 type PROCESSOR_GROUP_INFO struct {
 	MaximumProcessorCount uint8
 	ActiveProcessorCount  uint8
@@ -93,6 +101,8 @@ type PROCESSOR_GROUP_INFO struct {
 
 // GROUP_RELATIONSHIP represents information about processor groups.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-group_relationship
+//
+//nolint:revive
 type GROUP_RELATIONSHIP struct {
 	MaximumGroupCount uint16
 	ActiveGroupCount  uint16
@@ -104,7 +114,7 @@ type GROUP_RELATIONSHIP struct {
 // within a processor group.
 // see https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-processor_relationship
 //
-//nolint:unused
+//nolint:unused,revive
 type PROCESSOR_RELATIONSHIP struct {
 	Flags           uint8
 	EfficiencyClass uint8
@@ -116,6 +126,8 @@ type PROCESSOR_RELATIONSHIP struct {
 // SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX contains information about
 // the relationships of logical processors and related hardware.
 // https://learn.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-system_logical_processor_information_ex
+//
+//nolint:revive
 type SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX struct {
 	Relationship int
 	Size         uint32
@@ -149,6 +161,8 @@ const (
 // This includes the architecture and type of the processor, the number
 // of processors in the system, the page size, and other such information.
 // see https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/ns-sysinfoapi-system_info
+//
+//nolint:revive
 type SYSTEM_INFO struct {
 	wProcessorArchitecture  uint16
 	wReserved               uint16
@@ -164,6 +178,8 @@ type SYSTEM_INFO struct {
 }
 
 // CPU_INFO contains information about cpu, eg. number of cores, cache size
+//
+//nolint:revive
 type CPU_INFO struct {
 	numaNodeCount       int    // number of NUMA nodes
 	pkgcount            int    // number of packages (physical CPUS)
