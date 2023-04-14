@@ -33,7 +33,7 @@ func byteArrayToProcessorStruct(data []byte) (info SYSTEM_LOGICAL_PROCESSOR_INFO
 func byteArrayToGroupAffinity(data []byte) (affinity GROUP_AFFINITY, consumed uint32, err error) {
 	err = nil
 	affinity.Mask = uintptr(binary.LittleEndian.Uint64(data))
-	affinity.Group = uint16(binary.LittleEndian.Uint16(data[8:]))
+	affinity.Group = binary.LittleEndian.Uint16(data[8:])
 	// can skip the reserved, but count it
 	consumed = 16
 	return
@@ -42,7 +42,7 @@ func byteArrayToGroupAffinity(data []byte) (affinity GROUP_AFFINITY, consumed ui
 func byteArrayToProcessorInformationExStruct(data []byte) (info SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX, consumed uint32, err error) {
 	err = nil
 	info.Relationship = int(binary.LittleEndian.Uint32(data))
-	info.Size = uint32(binary.LittleEndian.Uint32(data[4:]))
+	info.Size = binary.LittleEndian.Uint32(data[4:])
 
 	consumed = 8
 	return
@@ -50,7 +50,7 @@ func byteArrayToProcessorInformationExStruct(data []byte) (info SYSTEM_LOGICAL_P
 
 func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIONSHIP, groupMask []GROUP_AFFINITY, consumed uint32, err error) {
 	err = nil
-	proc.Flags = uint8(data[0])
+	proc.Flags = data[0]
 	proc.EfficiencyClass = data[1]
 	proc.GroupCount = uint16(binary.LittleEndian.Uint32(data[22:]))
 	consumed = 24
@@ -86,8 +86,8 @@ func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uin
 func byteArrayToRelationCache(data []byte) (cache CACHE_RELATIONSHIP, consumed uint32, err error) {
 	cache.Level = data[0]
 	cache.Associativity = data[1]
-	cache.LineSize = uint16(binary.LittleEndian.Uint16(data[2:]))
-	cache.CacheSize = uint32(binary.LittleEndian.Uint32(data[4:]))
+	cache.LineSize = binary.LittleEndian.Uint16(data[2:])
+	cache.CacheSize = binary.LittleEndian.Uint32(data[4:])
 	cache.CacheType = int(binary.LittleEndian.Uint32(data[8:]))
 	// skip 20 bytes
 	consumed = 32
@@ -99,8 +99,8 @@ func byteArrayToRelationCache(data []byte) (cache CACHE_RELATIONSHIP, consumed u
 }
 
 func byteArrayToRelationGroup(data []byte) (group GROUP_RELATIONSHIP, gi []PROCESSOR_GROUP_INFO, consumed uint32, err error) {
-	group.MaximumGroupCount = uint16(binary.LittleEndian.Uint16(data))
-	group.ActiveGroupCount = uint16(binary.LittleEndian.Uint16(data[4:]))
+	group.MaximumGroupCount = binary.LittleEndian.Uint16(data)
+	group.ActiveGroupCount = binary.LittleEndian.Uint16(data[4:])
 	consumed = 24
 	if group.ActiveGroupCount > 0 {
 		groups := make([]PROCESSOR_GROUP_INFO, group.ActiveGroupCount)
