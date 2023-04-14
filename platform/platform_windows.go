@@ -95,7 +95,7 @@ func netServerGetInfo() (si SERVER_INFO_101, err error) {
 		return
 	}
 	// ignore free errors
-	//nolint:staticcheck
+	//nolint:errcheck
 	defer procNetApiBufferFree.Call(uintptr(unsafe.Pointer(outdata)))
 	return platGetServerInfo(outdata), nil
 }

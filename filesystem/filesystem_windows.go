@@ -49,7 +49,12 @@ func getDiskSize(vol string) (size uint64, freespace uint64) {
 	var getDisk = mod.NewProc("GetDiskFreeSpaceExW")
 	var sz uint64
 	var fr uint64
-	status, _, _ := getDisk.Call(uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(vol))),
+
+	volWinStr, err := syscall.UTF16PtrFromString(vol)
+	if err != nil {
+		return 0, 0
+	}
+	status, _, _ := getDisk.Call(uintptr(unsafe.Pointer(volWinStr)),
 		uintptr(0),
 		uintptr(unsafe.Pointer(&sz)),
 		uintptr(unsafe.Pointer(&fr)))
@@ -108,7 +113,7 @@ func getFileSystemInfo() (interface{}, error) {
 
 	if findHandle != InvalidHandle {
 		// ignore close error
-		//nolint:staticcheck
+		//nolint:errcheck
 		defer findClose.Call(fh)
 		moreData := true
 		for moreData {
