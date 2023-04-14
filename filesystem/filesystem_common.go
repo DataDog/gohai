@@ -3,6 +3,7 @@
 // Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
 // Copyright 2014-present Datadog, Inc.
 
+// Package filesystem regroups collecting information about the filesystem
 package filesystem
 
 // FileSystem is the Collector type of the filesystem package.

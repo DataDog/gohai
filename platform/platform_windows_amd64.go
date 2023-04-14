@@ -10,6 +10,8 @@ import (
 	"unsafe"
 )
 
+// WKSTA_INFO_100 contains platform-specific information
+// see https://learn.microsoft.com/en-us/windows/win32/api/lmwksta/ns-lmwksta-wksta_info_100
 type WKSTA_INFO_100 struct {
 	wki100_platform_id  uint32
 	wki100_computername string
@@ -18,6 +20,8 @@ type WKSTA_INFO_100 struct {
 	wki100_ver_minor    uint32
 }
 
+// SERVER_INFO_101 contains server-specific information
+// see https://learn.microsoft.com/en-us/windows/win32/api/lmserver/ns-lmserver-server_info_101
 type SERVER_INFO_101 struct {
 	sv101_platform_id   uint32
 	sv101_name          string
