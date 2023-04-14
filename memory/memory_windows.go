@@ -38,13 +38,13 @@ func getMemoryInfoByte() (mem uint64, swap uint64, warnings []string, err error)
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var getMem = mod.NewProc("GlobalMemoryStatusEx")
 
-	var mem_struct MEMORYSTATUSEX
+	var memStruct MEMORYSTATUSEX
 
-	mem_struct.dwLength = uint32(unsafe.Sizeof(mem_struct))
+	memStruct.dwLength = uint32(unsafe.Sizeof(memStruct))
 
-	status, _, err := getMem.Call(uintptr(unsafe.Pointer(&mem_struct)))
+	status, _, err := getMem.Call(uintptr(unsafe.Pointer(&memStruct)))
 	if status != 0 {
-		mem = mem_struct.ulTotalPhys
+		mem = memStruct.ulTotalPhys
 		err = nil
 	}
 	return
