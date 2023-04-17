@@ -207,5 +207,6 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		}
 	}
 
+	err = nil
 	return
 }
