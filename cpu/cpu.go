@@ -1,3 +1,9 @@
+// This file is licensed under the MIT License.
+// This product includes software developed at Datadog (https://www.datadoghq.com/).
+// Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
+// Copyright 2014-present Datadog, Inc.
+
+// Package cpu regroups collecting information about the CPU
 package cpu
 
 import (
@@ -8,16 +14,16 @@ import (
 	"github.com/DataDog/gohai/utils"
 )
 
-// Cpu holds metadata about the host CPU
-type Cpu struct {
-	// VendorId the CPU vendor ID
-	VendorId string
+// CPU holds metadata about the host CPU
+type CPU struct {
+	// VendorID the CPU vendor ID
+	VendorID string
 	// ModelName the CPU model
 	ModelName string
-	// CpuCores the number of cores for the CPU
-	CpuCores uint64
-	// CpuLogicalProcessors the number of logical core for the CPU
-	CpuLogicalProcessors uint64
+	// CPUCores the number of cores for the CPU
+	CPUCores uint64
+	// CPULogicalProcessors the number of logical core for the CPU
+	CPULogicalProcessors uint64
 	// Mhz the frequency for the CPU (Not available on ARM)
 	Mhz float64
 	// CacheSizeBytes the cache size for the CPU (Linux only)
@@ -29,10 +35,10 @@ type Cpu struct {
 	// Stepping the CPU stepping
 	Stepping string
 
-	// CpuPkgs the CPU pkg count (Windows only)
-	CpuPkgs uint64
-	// CpuNumaNodes the CPU numa node count (Windows only)
-	CpuNumaNodes uint64
+	// CPUPkgs the CPU pkg count (Windows only)
+	CPUPkgs uint64
+	// CPUNumaNodes the CPU numa node count (Windows only)
+	CPUNumaNodes uint64
 	// CacheSizeL1Bytes the CPU L1 cache size (Windows only)
 	CacheSizeL1Bytes uint64
 	// CacheSizeL2Bytes the CPU L2 cache size (Windows only)
@@ -43,44 +49,48 @@ type Cpu struct {
 
 const name = "cpu"
 
-func (self *Cpu) Name() string {
+// Name returns the name of the package
+func (cpu *CPU) Name() string {
 	return name
 }
 
-func (self *Cpu) Collect() (result interface{}, err error) {
-	result, err = getCpuInfo()
+// Collect collects the CPU information.
+// Returns an object which can be converted to a JSON or an error if nothing could be collected.
+// Tries to collect as much information as possible.
+func (cpu *CPU) Collect() (result interface{}, err error) {
+	result, err = getCPUInfo()
 	return
 }
 
-// Get returns a Cpu struct already initialized, a list of warnings and an error. The method will try to collect as much
+// Get returns a CPU struct already initialized, a list of warnings and an error. The method will try to collect as much
 // metadata as possible, an error is returned if nothing could be collected. The list of warnings contains errors if
 // some metadata could not be collected.
-func Get() (*Cpu, []string, error) {
-	cpuInfo, err := getCpuInfo()
+func Get() (*CPU, []string, error) {
+	cpuInfo, err := getCPUInfo()
 	if err != nil {
 		return nil, nil, err
 	}
 
 	warnings := []string{}
-	c := &Cpu{}
+	c := &CPU{}
 
-	c.VendorId = utils.GetString(cpuInfo, "vendor_id")
+	c.VendorID = utils.GetString(cpuInfo, "vendor_id")
 	c.ModelName = utils.GetString(cpuInfo, "model_name")
 	c.Family = utils.GetString(cpuInfo, "family")
 	c.Model = utils.GetString(cpuInfo, "model")
 	c.Stepping = utils.GetString(cpuInfo, "stepping")
 
-	// We serialize int to string in the windows version of 'GetCpuInfo' and back to int here. This is less than
+	// We serialize int to string in the windows version of 'GetCPUInfo' and back to int here. This is less than
 	// ideal but we don't want to break backward compatibility for now. The entire gohai project needs a rework but
 	// for now we simply adding typed field to avoid using maps of interface..
-	c.CpuPkgs = utils.GetUint64(cpuInfo, "cpu_pkgs", &warnings)
-	c.CpuNumaNodes = utils.GetUint64(cpuInfo, "cpu_numa_nodes", &warnings)
+	c.CPUPkgs = utils.GetUint64(cpuInfo, "cpu_pkgs", &warnings)
+	c.CPUNumaNodes = utils.GetUint64(cpuInfo, "cpu_numa_nodes", &warnings)
 	c.CacheSizeL1Bytes = utils.GetUint64(cpuInfo, "cache_size_l1", &warnings)
 	c.CacheSizeL2Bytes = utils.GetUint64(cpuInfo, "cache_size_l2", &warnings)
 	c.CacheSizeL3Bytes = utils.GetUint64(cpuInfo, "cache_size_l3", &warnings)
 
-	c.CpuCores = utils.GetUint64(cpuInfo, "cpu_cores", &warnings)
-	c.CpuLogicalProcessors = utils.GetUint64(cpuInfo, "cpu_logical_processors", &warnings)
+	c.CPUCores = utils.GetUint64(cpuInfo, "cpu_cores", &warnings)
+	c.CPULogicalProcessors = utils.GetUint64(cpuInfo, "cpu_logical_processors", &warnings)
 	c.Mhz = utils.GetFloat64(cpuInfo, "mhz", &warnings)
 
 	// cache_size uses the format '9216 KB'

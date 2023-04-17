@@ -1,3 +1,8 @@
+// This file is licensed under the MIT License.
+// This product includes software developed at Datadog (https://www.datadoghq.com/).
+// Copyright © 2015 Kentaro Kuribayashi <kentarok@gmail.com>
+// Copyright 2014-present Datadog, Inc.
+
 package network
 
 import (
@@ -9,10 +14,10 @@ import (
 
 // Network holds network metadata about the host
 type Network struct {
-	// IpAddress is the ipv4 address for the host
-	IpAddress string
-	// IpAddressv6 is the ipv6 address for the host
-	IpAddressv6 string
+	// IPAddress is the ipv4 address for the host
+	IPAddress string
+	// IPAddressv6 is the ipv6 address for the host
+	IPAddressv6 string
 	// MacAddress is the macaddress for the host
 	MacAddress string
 
@@ -22,11 +27,15 @@ type Network struct {
 
 const name = "network"
 
-func (self *Network) Name() string {
+// Name returns the name of the package
+func (network *Network) Name() string {
 	return name
 }
 
-func (self *Network) Collect() (result interface{}, err error) {
+// Collect collects the Network information.
+// Returns an object which can be converted to a JSON or an error if nothing could be collected.
+// Tries to collect as much information as possible.
+func (network *Network) Collect() (result interface{}, err error) {
 	result, err = getNetworkInfo()
 	if err != nil {
 		return
@@ -53,8 +62,8 @@ func Get() (*Network, []string, error) {
 	}
 
 	return &Network{
-		IpAddress:   utils.GetStringInterface(networkInfo, "ipaddress"),
-		IpAddressv6: utils.GetStringInterface(networkInfo, "ipaddressv6"),
+		IPAddress:   utils.GetStringInterface(networkInfo, "ipaddress"),
+		IPAddressv6: utils.GetStringInterface(networkInfo, "ipaddressv6"),
 		MacAddress:  utils.GetStringInterface(networkInfo, "macaddress"),
 	}, nil, nil
 }
@@ -104,9 +113,7 @@ func getMultiNetworkInfo() (multiNetworkInfo []map[string]interface{}, err error
 	return multiNetworkInfo, err
 }
 
-type Ipv6Address struct{}
-
-func externalIpv6Address() (string, error) {
+func externalIPv6Address() (string, error) {
 	ifaces, err := net.Interfaces()
 
 	if err != nil {
@@ -148,9 +155,7 @@ func externalIpv6Address() (string, error) {
 	return "", nil
 }
 
-type IpAddress struct{}
-
-func externalIpAddress() (string, error) {
+func externalIPAddress() (string, error) {
 	ifaces, err := net.Interfaces()
 
 	if err != nil {
@@ -187,8 +192,6 @@ func externalIpAddress() (string, error) {
 	}
 	return "", errors.New("not connected to the network")
 }
-
-type MacAddress struct{}
 
 func macAddress() (string, error) {
 	ifaces, err := net.Interfaces()
