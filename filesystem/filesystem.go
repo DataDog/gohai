@@ -6,7 +6,7 @@
 //go:build linux || darwin
 // +build linux darwin
 
-// Package filesystem regroups collecting information about the filesystem
+// Package filesystem returns information about available filesystems.
 package filesystem
 
 import (
