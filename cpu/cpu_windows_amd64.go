@@ -73,8 +73,7 @@ func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIO
 }
 
 func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uint32, err error) {
-	err = nil
-	numa.NodeNumber = binary.LittleEndian.Uint32(data)
+  numa.NodeNumber = binary.LittleEndian.Uint32(data)
 	// skip 20 bytes of reserved
 	consumed = 24
 	aff, used, err := byteArrayToGroupAffinity(data[consumed:])
@@ -117,35 +116,34 @@ func byteArrayToRelationGroup(data []byte) (group GROUP_RELATIONSHIP, gi []PROCE
 	return
 }
 
-func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
+func computeCoresAndProcessors() (CPU_INFO, error) {
+	var cpuInfo CPU_INFO
 	var mod = syscall.NewLazyDLL("kernel32.dll")
 	var getProcInfo = mod.NewProc("GetLogicalProcessorInformationEx")
 	var buflen uint32
 
-	err = syscall.Errno(0)
 	// first, figure out how much we need
-	status, _, err := getProcInfo.Call(uintptr(0xFFFF), // all relationships.
+	status, _, callErr := getProcInfo.Call(uintptr(0xFFFF), // all relationships.
 		uintptr(0),
 		uintptr(unsafe.Pointer(&buflen)))
 	if status == 0 {
-		if err != ERROR_INSUFFICIENT_BUFFER {
+		if callErr != ERROR_INSUFFICIENT_BUFFER {
 			// only error we're expecing here is insufficient buffer
 			// anything else is a failure
-			return
+			return cpuInfo, callErr
 		}
 	} else {
 		// this shouldn't happen. Errno won't be set (because the function)
 		// succeeded.  So just return something to indicate we've failed
-		err = syscall.Errno(1)
-		return
+		return cpuInfo, syscall.Errno(1)
 	}
 	buf := make([]byte, buflen)
-	status, _, err = getProcInfo.Call(
+	status, _, callErr = getProcInfo.Call(
 		uintptr(0xFFFF), // still want all relationships
 		uintptr(unsafe.Pointer(&buf[0])),
 		uintptr(unsafe.Pointer(&buflen)))
 	if status == 0 {
-		return
+		return cpuInfo, callErr
 	}
 	// walk through each of the buffers
 
@@ -153,8 +151,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 	for bufused < buflen {
 		info, used, decodeerr := byteArrayToProcessorInformationExStruct(buf[bufused:])
 		if decodeerr != nil {
-			err = decodeerr
-			return
+			return cpuInfo, decodeerr
 		}
 		bufused += used
 		if info.Size == 0 {
@@ -164,8 +161,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		case RelationProcessorCore:
 			core, groupMask, used, decodeerr := byteArrayToProcessorRelationshipStruct(buf[bufused:])
 			if decodeerr != nil {
-				err = decodeerr
-				return
+				return cpuInfo, decodeerr
 			}
 			bufused += used
 			cpuInfo.corecount++
@@ -175,8 +171,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		case RelationNumaNode:
 			_, used, decodeerr := byteArrayToNumaNode(buf[bufused:])
 			if decodeerr != nil {
-				err = decodeerr
-				return
+				return cpuInfo, decodeerr
 			}
 			cpuInfo.numaNodeCount++
 			bufused += used
@@ -184,8 +179,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		case RelationCache:
 			cache, used, decodeerr := byteArrayToRelationCache(buf[bufused:])
 			if decodeerr != nil {
-				err = decodeerr
-				return
+				return cpuInfo, decodeerr
 			}
 			bufused += used
 			switch cache.Level {
@@ -199,8 +193,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		case RelationProcessorPackage:
 			_, _, used, decodeerr := byteArrayToProcessorRelationshipStruct(buf[bufused:])
 			if decodeerr != nil {
-				err = decodeerr
-				return
+				return cpuInfo, decodeerr
 			}
 			bufused += used
 			cpuInfo.pkgcount++
@@ -208,8 +201,7 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		case RelationGroup:
 			group, groupInfo, used, decodeerr := byteArrayToRelationGroup(buf[bufused:])
 			if decodeerr != nil {
-				err = decodeerr
-				return
+				return cpuInfo, decodeerr
 			}
 			bufused += used
 			cpuInfo.relationGroups += int(group.MaximumGroupCount)
@@ -221,5 +213,5 @@ func computeCoresAndProcessors() (cpuInfo CPU_INFO, err error) {
 		}
 	}
 
-	return
+	return cpuInfo, nil
 }
