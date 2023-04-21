@@ -15,7 +15,7 @@ func getNetworkInfo() (networkInfo map[string]interface{}, err error) {
 	}
 	networkInfo["macaddress"] = macaddress
 
-	ipAddress, err := externalIpAddress()
+	ipAddress, err := externalIPAddress()
 	if err != nil {
 		return networkInfo, err
 	}

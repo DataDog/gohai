@@ -23,7 +23,7 @@ import (
 // nodeNRegex recognizes directories named `nodeNN`
 var nodeNRegex = regexp.MustCompile("^node[0-9]+$")
 
-func getCpuInfo() (cpuInfo map[string]string, err error) {
+func getCPUInfo() (cpuInfo map[string]string, err error) {
 	cpuInfo = make(map[string]string)
 
 	procCpu, err := readProcCpuInfo()

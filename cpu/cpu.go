@@ -15,6 +15,8 @@ import (
 )
 
 // Cpu holds metadata about the host CPU
+//
+//nolint:revive
 type Cpu struct {
 	// VendorId the CPU vendor ID
 	VendorId string
@@ -58,7 +60,7 @@ func (cpu *Cpu) Name() string {
 // Returns an object which can be converted to a JSON or an error if nothing could be collected.
 // Tries to collect as much information as possible.
 func (cpu *Cpu) Collect() (result interface{}, err error) {
-	result, err = getCpuInfo()
+	result, err = getCPUInfo()
 	return
 }
 
@@ -66,7 +68,7 @@ func (cpu *Cpu) Collect() (result interface{}, err error) {
 // metadata as possible, an error is returned if nothing could be collected. The list of warnings contains errors if
 // some metadata could not be collected.
 func Get() (*Cpu, []string, error) {
-	cpuInfo, err := getCpuInfo()
+	cpuInfo, err := getCPUInfo()
 	if err != nil {
 		return nil, nil, err
 	}

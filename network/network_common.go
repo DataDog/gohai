@@ -13,6 +13,8 @@ import (
 )
 
 // Network holds network metadata about the host
+//
+//nolint:revive
 type Network struct {
 	// IpAddress is the ipv4 address for the host
 	IpAddress string
@@ -155,7 +157,7 @@ func externalIpv6Address() (string, error) {
 	return "", nil
 }
 
-func externalIpAddress() (string, error) {
+func externalIPAddress() (string, error) {
 	ifaces, err := net.Interfaces()
 
 	if err != nil {

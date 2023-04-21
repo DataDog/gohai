@@ -16,7 +16,7 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-var getCpuInfo = GetCpuInfo
+var getCPUInfo = GetCpuInfo
 
 // ERROR_INSUFFICIENT_BUFFER is the error number associated with the
 // "insufficient buffer size" error
