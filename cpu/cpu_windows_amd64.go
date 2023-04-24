@@ -73,7 +73,7 @@ func byteArrayToProcessorRelationshipStruct(data []byte) (proc PROCESSOR_RELATIO
 }
 
 func byteArrayToNumaNode(data []byte) (numa NUMA_NODE_RELATIONSHIP, consumed uint32, err error) {
-  numa.NodeNumber = binary.LittleEndian.Uint32(data)
+	numa.NodeNumber = binary.LittleEndian.Uint32(data)
 	// skip 20 bytes of reserved
 	consumed = 24
 	aff, used, err := byteArrayToGroupAffinity(data[consumed:])
