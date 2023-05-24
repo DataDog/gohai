@@ -12,6 +12,8 @@ In order to update to the most recent version of Gohai, you have to replace `git
 
 Note that the API was changed so verify that the API calls that you are using did not change in the new destination.
 
+This repository will likely be archived soon.
+
 ## Usage
 
 Gohai will build and install with `go get`. We require at least Go 1.17.
