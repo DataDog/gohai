@@ -4,9 +4,19 @@
 
 Gohai is a tool which collects an inventory of system information. It aims to implement some parts of features from [facter](https://github.com/puppetlabs/facter) and [ohai](https://github.com/opscode/ohai).  It's forked from Kentaro Kuribayashi's [verity](https://github.com/kentaro/verity).
 
+## :warning: Gohai now lives in the repository of the [datadog-agent](https://github.com/DataDog/datadog-agent), under the `/pkg/gohai` directory, as an independent module :warning:
+
+Bug reports and feature requests should be addressed to the new parent repository ([datadog-agent](https://github.com/DataDog/datadog-agent)).
+
+In order to update to the most recent version of Gohai, you have to replace `github.com/DataDog/gohai` with `github.com/DataDog/datadog-agent/pkg/gohai` in your `go.mod` and your imports.
+
+Note that the API was changed so verify that the API calls that you are using did not change in the new destination.
+
+This repository will likely be archived soon.
+
 ## Usage
 
-Gohai will build and install with `go get`. We require at least Go 1.7.
+Gohai will build and install with `go get`. We require at least Go 1.17.
 
 ```sh
 go get github.com/DataDog/gohai
